@@ -36,18 +36,10 @@ const Sidebar = () => {
 								{item.name}
 							</Link>
 						))}
-						{location.pathname !== "/login" && (
-							<button onClick={logout}>logout</button>
-						)}
+					
 					</>
 				)}
-				{!user && (
-					<Link
-						to="/login"
-						className={location.pathname === "/login" ? "sidebar_active" : ""}>
-						Login
-					</Link>
-				)}
+				
 			</div>
 		</div>
 	)

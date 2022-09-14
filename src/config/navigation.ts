@@ -1,36 +1,41 @@
 export const navigationItems = {
   sidebar: [
-    {
-      name: 'Dashboard ',
-      to: '/dashboard', 
-      text: 'dashboard',
+    // {
+    //   name: 'Dashboard ',
+    //   to: '/dashboard', 
+    //   text: 'dashboard',
       
-    },
+    // },
+    // {
+    //   name: 'Tabs Demo ',
+    //   to: '/tabs', 
+    //   text:'tabsdemo'
+    // },
+    // {
+    //   name: 'Dynamic Form ',
+    //   to: '/dynamic-form', 
+    //   text:'dynamicform'
+    // },
+    // {
+    //   name: 'Settings ',
+    //   to: '/settings', 
+    //   text:'settings'
+    // },
     {
-      name: 'Tabs Demo ',
-      to: '/tabs', 
-      text:'tabsdemo'
-    },
-    {
-      name: 'Dynamic Form ',
-      to: '/dynamic-form', 
-      text:'dynamicform'
-    },
-    {
-      name: 'Settings ',
-      to: '/settings', 
-      text:'settings'
-    },
-    {
-      name: 'Users ',
+      name: 'WMSs ',
       to: '/users', 
       text:'users'
     },
     {
-      name: 'Example ',
-      to: '/example', 
-      text:'example'
+      name: 'WFSs ',
+      to: '/wfs', 
+      text:'wfs'
     },
+    // {
+    //   name: 'Example ',
+    //   to: '/example', 
+    //   text:'example'
+    // },
   ], 
   footer: [], 
   
