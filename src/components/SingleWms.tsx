@@ -5,21 +5,30 @@ import {
 	Link,
 } from 'react-router-dom'
 
-import { WmsType } from './Wms'
+import { UserType } from './Wms'
 import { Layers } from './Wms' 
 
 const SingleUser = () => {
 	const params = useParams()
 
 	const [user, setUser] =
-		React.useState<WmsType>()
+		React.useState<UserType>()
 
 	
-	// const [layer, setLayer] =
-	// 	React.useState<Layers>()
+	const [layer, setLayer] =
+		React.useState<Layers>()
 
 		
 
+	// React.useEffect(() => {
+	// 	const singleUserApiUrl = `https://jsonplaceholder.typicode.com/users/${params.userId}`
+	// 	//fetch users from json placeholder
+	// 	fetch(singleUserApiUrl)
+	// 		.then((response) =>
+	// 			response.json(),
+	// 		)
+	// 		.then((json) => setUser(json))
+	// }, [params])
 
 
 	React.useEffect(() => {
@@ -31,19 +40,19 @@ const SingleUser = () => {
 		  //console.log("params",params);
 	  }, [params]);
 	
-	//   React.useEffect(() => {
-	// 	const singleUserApiUrl = `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wms/${params.userId}`
-	// 	axios
-	// 	  .get(singleUserApiUrl)
-	// 	  .then(response => setLayer(response.data.data.layers.data))
-	// 	  .catch(error => console.log({ error }));
-	// 	  //console.log("params",params);
-	//   }, [params]);
+	  React.useEffect(() => {
+		const singleUserApiUrl = `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wms/${params.userId}`
+		axios
+		  .get(singleUserApiUrl)
+		  .then(response => setLayer(response.data.data.layers.data))
+		  .catch(error => console.log({ error }));
+		  //console.log("params",params);
+	  }, [params]);
 
 
 	return (
 		<>
-			<Link to='/users'>Go back</Link>
+			<Link to='/wms'>Go back</Link>
 			{user && (
 				<div
 					className='users__card'
@@ -144,10 +153,7 @@ const SingleUser = () => {
 					layers:
 						<span className='normal'>
 
-
-						{user.relationships.layers.data[0].id}
-						
-
+							{user.relationships.layers.data[0].id}
 						</span>
 					</p>
 			      

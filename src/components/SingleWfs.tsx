@@ -37,7 +37,7 @@ const SingleWfs = () => {
 
 	return (
 		<>
-			<Link to='/users'>Go back</Link>
+			<Link to='/wfs'>Go back</Link>
 			{wfs && (
 				<div
 					className='users__card'
