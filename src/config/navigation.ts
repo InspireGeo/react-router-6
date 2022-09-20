@@ -37,7 +37,13 @@ export const navigationItems = {
       text:'example'
     },
   ], 
-  footer: [], 
+  footer: [
+    {
+      name: 'Footer',
+      to: '/footer', 
+      text:'footer'
+    }
+  ], 
   
 
 

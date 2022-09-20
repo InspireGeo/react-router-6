@@ -2,7 +2,7 @@ import React from "react"
 import {Link} from "react-router-dom"
 import axios from "axios";
 
-export type UserType = {
+export type WmssType = {
 	id: number
 	name: string
 	email: string
@@ -56,10 +56,10 @@ export type Layers = {
 }
 
 
-type UsersType = Array<UserType>
+type WmsType = Array<WmssType>
 
-const Users = (props: any) => {
-	const [users, setUsers] = React.useState<UsersType>([])
+const Wmss = (props: any) => {
+	const [wmss, setWmss] = React.useState<WmsType>([])
 	const [pagenumber, setPagenumber] = React.useState(1)
   
 
@@ -67,7 +67,7 @@ const Users = (props: any) => {
 	React.useEffect(() => {
 		axios
 		.get(`https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wms/?page[number]=${pagenumber}`)
-		.then(response => setUsers(response.data.data))
+		.then(response => setWmss(response.data.data))
 		  .catch(error => console.log({ error }));
 	  }, [pagenumber]);
 
@@ -79,14 +79,14 @@ const Users = (props: any) => {
 
 
 			<div className="users__list">
-				{users &&
-					users.map((user) => (
+				{wmss &&
+					wmss.map((wms) => (
 						//single user card
-						<div className="users__card" key={user.id}>
-							<Link to={`/wms/${user.id}`}>
+						<div className="users__card" key={wms.id}>
+							<Link to={`/wms/${wms.id}`}>
 								<p>
 								
-									<span className="normal">{user.attributes.title}{"---("}{user.relationships.layers.meta.count}{")"}</span>
+									<span className="normal">{wms.attributes.title}{"---("}{wms.relationships.layers.meta.count}{")"}</span>
 								</p>
 							</Link>
 						</div>
@@ -96,4 +96,4 @@ const Users = (props: any) => {
 	)
 }
 
-export default Users
+export default Wmss

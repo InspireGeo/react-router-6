@@ -26,7 +26,7 @@ const SingleWfs = () => {
 
 
 	React.useEffect(() => {
-		const singleUserApiUrl = `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wfs/${params.userId}`
+		const singleUserApiUrl = `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wfs/${params.wfsId}`
 		axios
 		  .get(singleUserApiUrl)
 		  .then(response => setWfs(response.data.data))

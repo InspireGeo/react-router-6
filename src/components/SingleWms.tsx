@@ -5,14 +5,14 @@ import {
 	Link,
 } from 'react-router-dom'
 
-import { UserType } from './Wms'
+import { WmssType } from './Wms'
 import { Layers } from './Wms' 
 
-const SingleUser = () => {
+const SingleWms= () => {
 	const params = useParams()
 
-	const [user, setUser] =
-		React.useState<UserType>()
+	const [wms, setWms] =
+		React.useState<WmssType>()
 
 	
 	const [layer, setLayer] =
@@ -32,16 +32,16 @@ const SingleUser = () => {
 
 
 	React.useEffect(() => {
-		const singleUserApiUrl = `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wms/${params.userId}`
+		const singleUserApiUrl = `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wms/${params.wmsId}`
 		axios
 		  .get(singleUserApiUrl)
-		  .then(response => setUser(response.data.data))
+		  .then(response => setWms(response.data.data))
 		  .catch(error => console.log({ error }));
 		  //console.log("params",params);
 	  }, [params]);
 	
 	  React.useEffect(() => {
-		const singleUserApiUrl = `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wms/${params.userId}`
+		const singleUserApiUrl = `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wms/${params.wmsId}`
 		axios
 		  .get(singleUserApiUrl)
 		  .then(response => setLayer(response.data.data.layers.data))
@@ -53,99 +53,99 @@ const SingleUser = () => {
 	return (
 		<>
 			<Link to='/wms'>Go back</Link>
-			{user && (
+			{wms && (
 				<div
 					className='users__card'
-					key={user.id}>
+					key={wms.id}>
 					<p>
 						Id:
 						<span className='normal'>
-							{user.id}
+							{wms.id}
 						</span>
 					</p>
 
 					<p>
 						Type:
 						<span className='normal'>
-							{user.type}
+							{wms.type}
 						</span>
 					</p>
 					<p>
 						Server Name:
 						<span className='normal'>
-							{user.attributes.title}
+							{wms.attributes.title}
 						</span>
 					</p>
 					<p>
 					    isAccessible:
 						<span className='normal'>
-							{user.attributes.isAccessible}
+							{wms.attributes.isAccessible}
 						</span>
 					</p>
 					<p>
 					stringRepresentation:
 						<span className='normal'>
-							{user.attributes.stringRepresentation}
+							{wms.attributes.stringRepresentation}
 						</span>
 					</p>
 					<p>
 					lastModifiedAt:
 						<span className='normal'>
-							{user.attributes.lastModifiedAt}
+							{wms.attributes.lastModifiedAt}
 						</span>
 					</p>
 					<p>
 					xmlBackupFile:
 						<span className='normal'>
-							{user.attributes.xmlBackupFile}
+							{wms.attributes.xmlBackupFile}
 						</span>
 					</p>
 					<p>
 					accessConstraints:
 						<span className='normal'>
-							{user.attributes.accessConstraints}
+							{wms.attributes.accessConstraints}
 						</span>
 					</p>
 					<p>
 					fees:
 						<span className='normal'>
-							{user.attributes.fees}
+							{wms.attributes.fees}
 						</span>
 					</p>
 					<p>
 					useLimitation::
 						<span className='normal'>
-							{user.attributes.useLimitation}
+							{wms.attributes.useLimitation}
 						</span>
 					</p>
 					<p>
 					licenseSourceNote:
 						<span className='normal'>
-							{user.attributes.licenseSourceNote}
+							{wms.attributes.licenseSourceNote}
 						</span>
 					</p>
 					<p>
 					fileIdentifier:
 						<span className='normal'>
-							{user.attributes.fileIdentifier}
+							{wms.attributes.fileIdentifier}
 						</span>
 					</p>
 					<p>
 					abstract:
 						<span className='normal'>
-							{user.attributes.abstract}
+							{wms.attributes.abstract}
 						</span>
 					</p>
 					<p>
 					isActive:
 						<span className='normal'>
-							{user.attributes.isActive}
+							{wms.attributes.isActive}
 						</span>
 					</p>
 					<p>
 					version:
 						<span className='normal'>
-							{user.attributes.version}
+							{wms.attributes.version}
 						</span>
 					</p>
 					
@@ -153,7 +153,7 @@ const SingleUser = () => {
 					layers:
 						<span className='normal'>
 
-							{user.relationships.layers.data[0].id}
+							{wms.relationships.layers.data[0].id}
 						</span>
 					</p>
 			      
@@ -202,4 +202,4 @@ const SingleUser = () => {
 	)
 }
 
-export default SingleUser
+export default SingleWms

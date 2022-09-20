@@ -12,7 +12,16 @@ const Sidebar = () => {
 			<div className="sidebar__items">
 				
 					<>
-						{navigationItems.sidebar.map((item) => (
+						{navigationItems.sidebar.map((item:any) => (
+							<Link
+								key={item.text}
+								to={item.to}
+							>
+								{item.name}
+							</Link>
+						))}
+
+						{navigationItems.footer.map((item:any) => (
 							<Link
 								key={item.text}
 								to={item.to}
