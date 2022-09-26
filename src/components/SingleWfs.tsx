@@ -10,6 +10,7 @@ import { WFSType } from './Wfs'
 
 const SingleWfs = () => {
 	const params = useParams()
+	//console.log('params: ',params)
 
 	const [wfs, setWfs] =
 		React.useState<WFSType>()

@@ -1,6 +1,8 @@
-import React from "react"
+import React, { useContext } from "react"
 import {Link} from "react-router-dom"
 import axios from "axios";
+import ReactPaginate from "react-paginate";
+import { ServiceContex } from "../Routes";
 
 export type WFSType = {
 	id: number
@@ -46,10 +48,25 @@ export type Relationships = {
 }
 type WfssType = Array<WFSType>
 
-const Wfss = (props: any) => {
+const Wfss = () => {
 	const [wfss, setWfss] = React.useState<WfssType>([])
-	const [pagenumber, setPagenumber] = React.useState(1)
+	const [pagenumber, setPagenumber] = React.useState<number>(1)
+	const [totalpagenumber, setTotalPagenumber] = React.useState<number>(0)
 
+
+    const context = useContext(ServiceContex)
+
+	console.log(context)
+
+
+
+
+	React.useEffect(() => {
+		axios
+		.get(`https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wfs/?page[number]=${pagenumber}`)
+		.then(response => setTotalPagenumber(response.data.meta.pagination.pages))
+		  .catch(error => console.log({ error }));
+	  }, [totalpagenumber]);
 
 
 	React.useEffect(() => {
@@ -59,13 +76,41 @@ const Wfss = (props: any) => {
 		  .catch(error => console.log({ error }));
 	  }, [pagenumber]);
 
-	  
+	
+	  const handlePageClick =(data:any) =>{
+
+		setPagenumber(data.selected+1)
+	}
 
 	return (
 		<div className="users">
 			<h1>WFSs List</h1>
-			<button onClick={() => setPagenumber((prev) => prev+1)}>Next Page</button>
+			<ReactPaginate
 
+			pageCount={totalpagenumber}
+			previousLabel={'previous'}
+			nextLabel={'next'}
+			breakLabel={'...'}
+			marginPagesDisplayed={3}
+			pageRangeDisplayed={3}
+			onPageChange={handlePageClick}
+			containerClassName={'pagination'}
+			pageClassName={'page-item'}
+			pageLinkClassName={'page-link'}
+			previousClassName={'page-item'}
+			previousLinkClassName={'page-link'}
+			nextClassName={'page-item'}
+			nextLinkClassName={'page-link'}
+			breakClassName={'page-item'}
+			breakLinkClassName={'page-link'}
+			activeClassName={'active'}
+			
+			/>
+
+			{/* <button disabled={pagenumber===1 ? true : false} onClick={() => setPagenumber((prev) => prev-1)}>Back</button>
+			<>{` aktuel seite: ${pagenumber} `}</>
+			<button disabled={pagenumber===totalpagenumber ? true : false} onClick={() => setPagenumber((prev) => prev+1)}>Next Page</button>
+			 */}
 
 			<div className="users__list">
 				{wfss &&
