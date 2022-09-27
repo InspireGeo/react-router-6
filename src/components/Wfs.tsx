@@ -40,16 +40,33 @@ export type Relationships = {
 	featuretypes:{
 		meta:{
 			count:number,
-		}
+		},
+		data:[FeatureTypes],
 	},
             
 
 	
 }
+
+export type FeatureTypes = [
+	{
+	type:string,
+	id:string,
+	
+	}
+	
+]
+
+
 type WfssType = Array<WFSType>
+type FeatureType = Array<FeatureTypes>
+
+
+
 
 const Wfss = () => {
 	const [wfss, setWfss] = React.useState<WfssType>([])
+	const [features, setFeatures] = React.useState<FeatureType>([])
 	const [pagenumber, setPagenumber] = React.useState<number>(1)
 	const [totalpagenumber, setTotalPagenumber] = React.useState<number>(0)
 
@@ -114,12 +131,12 @@ const Wfss = () => {
 
 			<div className="users__list">
 				{wfss &&
-					wfss.map((user) => (
+					wfss.map((wfs) => (
 						//single user card
-						<div className="users__card" key={user.id}>
-							<Link to={`/wfs/${user.id}`}>
+						<div className="users__card" key={wfs.id}>
+							<Link to={`/wfs/${wfs.id}`} state={{from:pagenumber,features}} >
 								<p>
-                                <span className="normal">{user.attributes.title}{"---("}{user.relationships.featuretypes.meta.count}{")"}</span>
+                                <span className="normal">{wfs.attributes.title}{"---("}{wfs.relationships.featuretypes.meta.count}{")"}</span>
 
 									{/* <span className="normal">{user.attributes.title}</span> */}
 								</p>

@@ -4,7 +4,7 @@ import {
 	useParams,
 	Link,
 } from 'react-router-dom'
-import { WFSType } from './Wfs'
+import { FeatureTypes, WFSType } from './Wfs'
 
 
 
@@ -12,27 +12,35 @@ const SingleWfs = () => {
 	const params = useParams()
 	//console.log('params: ',params)
 
-	const [wfs, setWfs] =
-		React.useState<WFSType>()
+	const [wfs, setWfs] =React.useState<WFSType>()
 
-	// React.useEffect(() => {
-	// 	const singleUserApiUrl = `https://jsonplaceholder.typicode.com/users/${params.userId}`
-	// 	//fetch users from json placeholder
-	// 	fetch(singleUserApiUrl)
-	// 		.then((response) =>
-	// 			response.json(),
-	// 		)
-	// 		.then((json) => setUser(json))
-	// }, [params])
+	const [feature, setFeature] = React.useState<FeatureTypes>();
 
+
+	
 
 	React.useEffect(() => {
-		const singleUserApiUrl = `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wfs/${params.wfsId}`
+		const singleWfsApiUrl = `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wfs/${params.wfsId}`
 		axios
-		  .get(singleUserApiUrl)
+		  .get(singleWfsApiUrl)
 		  .then(response => setWfs(response.data.data))
 		  .catch(error => console.log({ error }));
 		  //console.log("params",params);
+	  }, [params]);
+
+	  React.useEffect(() => {
+		const singleWfsApiUrl = `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wfs/${params.wfsId}`;
+		axios
+		  .get(singleWfsApiUrl)
+		  .then((response) => setFeature(response.data.data.relationships.featuretypes.data))
+		 
+		  .catch((error) => console.log({ error }));
+		
+		//console.log("params",params);
+	
+	  
+	
+		
 	  }, [params]);
 	
 
@@ -134,6 +142,17 @@ const SingleWfs = () => {
 							{wfs.attributes.version}
 						</span>
 					</p>
+
+					<p>
+            <div>Features:</div>
+            {feature ?
+              feature.map((feature) => (
+               
+                <div className="users__card" key={feature.id}>
+                  <span className="normal">{feature.id}</span>
+                </div>
+              )):"keine"}
+          </p>
 
 
 				</div>

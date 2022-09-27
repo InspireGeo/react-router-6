@@ -1,4 +1,4 @@
-import React,{useContext} from "react";
+import React, { useContext } from "react";
 import axios from "axios";
 import { useParams, Link, useLocation } from "react-router-dom";
 
@@ -7,25 +7,32 @@ import { Layers } from "./Wms";
 import { ServiceContex } from "../Routes";
 const SingleWms = () => {
   const params = useParams();
- // console.log('params: ',params)
-
+  // console.log('params: ',params)
 
   const [wms, setWms] = React.useState<WmssType>();
 
   const [layer, setLayer] = React.useState<Layers>();
 
   const location = useLocation();
- 
+
   //const [pagenumber, setPagenumber] = React.useState(location.state)
 
-{/* React.useEffect(() => {
+  {
+    /* React.useEffect(() => {
  setPagenumber(parseInt(location.state))
 
-}, []);*/}
+}, []);*/
+  }
 
- 
-
-
+  React.useEffect(() => {
+    //console.log("location from new page", location.state)
+    if (location.state) {
+      let _state = location.state as any;
+      //setPagenumber(_state)
+      //console.log(_state);
+    }
+    //console.log(location.state)
+  }, [location.state]);
 
   React.useEffect(() => {
     const singleWmsApiUrl = `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wms/${params.wmsId}`;
@@ -40,16 +47,25 @@ const SingleWms = () => {
     const singleWmsApiUrl = `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wms/${params.wmsId}`;
     axios
       .get(singleWmsApiUrl)
-      .then((response) => setLayer(response.data.data.layers.data))
+      .then((response) => setLayer(response.data.data.relationships.layers.data))
+     
       .catch((error) => console.log({ error }));
+    
     //console.log("params",params);
-  }, [params]);
 
   
 
+    
+  }, [params]);
+
+
   return (
     <>
-      <Link to="/wms" state={{from:location.state}}>Go back</Link>
+    
+      <Link to="/wms" state={{ from: location.state }}>
+        Go back
+      </Link>
+      
       {wms && (
         <div className="users__card" key={wms.id}>
           <p>
@@ -118,45 +134,19 @@ const SingleWms = () => {
 
           <p>
             layers:
-            <span className="normal">
-              {wms.relationships.layers.data[0].id}
-            </span>
+            {layer &&
+              layer.map((layer) => (
+               
+                <div className="users__card" key={layer.id}>
+                  <span className="normal">{layer.id}</span>
+                </div>
+              ))}
           </p>
+          
         </div>
       )}
 
-      {/* 			 
-            {layer &&
-					layer.map((layer) => (
-						//single user card
-						<div className="users__card" key={layer.id}>
-							
-									<span className="normal">{user.attributes.title}{"---("}{user.relationships.layers.meta.count}{")"}</span>
-							
-						</div>
-					))}
-
-
-
-					<p>
-					layers:
-						<span className='normal'>
-
-							{user.relationships.layers.data[0].id}
-						</span>
-					</p> */}
-
-      {/* {user && user.relationships.layers.data.map((layer) => (
-						//single user card
-						<div className="users__card" key={user.id}>
-							<Link to={`/users/${user.id}`}>
-								<p>
-								
-									<span className="normal">{user.attributes.title}{"("}{user.relationships.layers.meta.count}{")"}</span>
-								</p>
-							</Link>
-						</div>
-					))} */}
+      
     </>
   );
 };

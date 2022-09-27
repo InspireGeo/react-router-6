@@ -3,6 +3,7 @@ import {Link,useLocation,useParams} from "react-router-dom"
 import axios from "axios";
 import ReactPaginate from "react-paginate";
 import { ServiceContex } from "../Routes";
+
 export type WmssType = {
 	id: number
 	name: string
@@ -47,17 +48,18 @@ export type Relationships = {
 	
 }
 
-export type Layers = {
-	
+export type Layers = [
+	{
 	type:string,
 	id:string,
 	
-        
+	}
 	
-}
+]
 
 
 type WmsType = Array<WmssType>
+type Layer = Array<Layers>
 
 
 
@@ -66,14 +68,16 @@ const Wmss = () => {
 	const params = useParams();
 
 	const [wmss, setWmss] = React.useState<WmsType>([])
+	const [layers, setLayers] = React.useState<Layer>([])
 	const [pagenumber, setPagenumber] = React.useState<number>(1)
 	const [totalpagenumber, setTotalPagenumber] = React.useState<number>(3)
+	
 
 
 
 	const context = useContext(ServiceContex)
 
-	console.log(context)
+	//console.log(context)
 
 
 
@@ -83,7 +87,7 @@ const Wmss = () => {
 		if(location.state){
 			let _state=location.state as any
 			//setPagenumber(_state)
-			console.log(_state)
+			//console.log(_state)
 			
 		}
 		//console.log(location.state)
@@ -95,7 +99,13 @@ const Wmss = () => {
 		const pagenumber2=location.state
 		console.log(pagenumber2)
 	 } */
-	 
+	/*  React.useEffect(() => {
+		axios
+		.get(`https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wms/?page[number]=${pagenumber}`)
+		.then(response => setLayers(response.data.data.layers.data))
+		  .catch(error => console.log({ error }));
+	  }, [wmsNumber]); */
+
 
 	React.useEffect(() => {
 		axios
@@ -119,6 +129,9 @@ const Wmss = () => {
 		setPagenumber(data.selected+1)
 		
 	}
+
+
+	
 	
 	return (
 		<div className="users">
@@ -154,7 +167,7 @@ const Wmss = () => {
 					wmss.map((wms) => (
 						//single user card
 						<div className="users__card" key={wms.id}>
-							<Link to={`/wms/${wms.id}` } state={{from:pagenumber}} >
+							<Link to={`/wms/${wms.id}` } state={{from:pagenumber,layers}}  >
 								<p>
 								
 									<span className="normal">{wms.attributes.title}{"---("}{wms.relationships.layers.meta.count}{")"}</span>
