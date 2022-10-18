@@ -23,7 +23,7 @@ export const navigationItems = {
     // },
     {
       name: 'WMSs ',
-      to: '/wms ',
+      to: '/wms',
       text:'wms'
     },
     {
@@ -32,10 +32,15 @@ export const navigationItems = {
       text:'wfs'
     },
     {
-      name: 'Example ',
-      to: '/example', 
-      text:'example'
+      name: 'Map ',
+      to: '/map', 
+      text:'map'
     },
+    {
+      name: 'Footer',
+      to: '/footer', 
+      text:'footer'
+    }
   ], 
   footer: [
     {

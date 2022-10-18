@@ -42,7 +42,8 @@ const SingleWfs = () => {
 	
 		
 	  }, [params]);
-	
+
+	  const featuresCount=feature?.length;
 
 	return (
 		<>
@@ -51,6 +52,12 @@ const SingleWfs = () => {
 				<div
 					className='users__card'
 					key={wfs.id}>
+					<p>
+						Server Name:
+						<span className='normal'>
+							{wfs.attributes.title}
+						</span>
+					</p>
 					<p>
 						Id:
 						<span className='normal'>
@@ -64,12 +71,7 @@ const SingleWfs = () => {
 							{wfs.type}
 						</span>
 					</p>
-					<p>
-						Server Name:
-						<span className='normal'>
-							{wfs.attributes.title}
-						</span>
-					</p>
+					
 					<p>
 					    isAccessible:
 						<span className='normal'>
@@ -144,7 +146,7 @@ const SingleWfs = () => {
 					</p>
 
 					<p>
-            <div>Features:</div>
+            <div>Features: ({featuresCount})</div>
             {feature ?
               feature.map((feature) => (
                

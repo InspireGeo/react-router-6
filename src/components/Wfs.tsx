@@ -59,21 +59,21 @@ export type FeatureTypes = [
 
 
 type WfssType = Array<WFSType>
-type FeatureType = Array<FeatureTypes>
+//type FeatureType = Array<FeatureTypes>
 
 
 
 
 const Wfss = () => {
 	const [wfss, setWfss] = React.useState<WfssType>([])
-	const [features, setFeatures] = React.useState<FeatureType>([])
+	//const [features, setFeatures] = React.useState<FeatureType>([])
 	const [pagenumber, setPagenumber] = React.useState<number>(1)
 	const [totalpagenumber, setTotalPagenumber] = React.useState<number>(0)
 
 
     const context = useContext(ServiceContex)
 
-	console.log(context)
+	//console.log(context)
 
 
 
@@ -81,8 +81,8 @@ const Wfss = () => {
 	React.useEffect(() => {
 		axios
 		.get(`https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wfs/?page[number]=${pagenumber}`)
-		.then(response => setTotalPagenumber(response.data.meta.pagination.pages))
-		  .catch(error => console.log({ error }));
+		.then(response => setTotalPagenumber(Math.ceil(response.data.meta.pagination.count/10)))
+		.catch(error => console.log({ error }));
 	  }, [totalpagenumber]);
 
 
@@ -134,7 +134,7 @@ const Wfss = () => {
 					wfss.map((wfs) => (
 						//single user card
 						<div className="users__card" key={wfs.id}>
-							<Link to={`/wfs/${wfs.id}`} state={{from:pagenumber,features}} >
+							<Link to={`/wfs/${wfs.id}`} state={{from:pagenumber}} >
 								<p>
                                 <span className="normal">{wfs.attributes.title}{"---("}{wfs.relationships.featuretypes.meta.count}{")"}</span>
 

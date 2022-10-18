@@ -4,7 +4,9 @@ import { useParams, Link, useLocation } from "react-router-dom";
 
 import { WmssType } from "./Wms";
 import { Layers } from "./Wms";
-import { ServiceContex } from "../Routes";
+//import { ServiceContex } from "../Routes";
+
+
 const SingleWms = () => {
   const params = useParams();
   // console.log('params: ',params)
@@ -13,18 +15,18 @@ const SingleWms = () => {
 
   const [layer, setLayer] = React.useState<Layers>();
 
-  const location = useLocation();
+  //const location = useLocation();
 
   //const [pagenumber, setPagenumber] = React.useState(location.state)
 
-  {
+  
     /* React.useEffect(() => {
  setPagenumber(parseInt(location.state))
 
 }, []);*/
-  }
+  
 
-  React.useEffect(() => {
+/*   React.useEffect(() => {
     //console.log("location from new page", location.state)
     if (location.state) {
       let _state = location.state as any;
@@ -33,7 +35,7 @@ const SingleWms = () => {
     }
     //console.log(location.state)
   }, [location.state]);
-
+ */
   React.useEffect(() => {
     const singleWmsApiUrl = `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wms/${params.wmsId}`;
     axios
@@ -48,26 +50,25 @@ const SingleWms = () => {
     axios
       .get(singleWmsApiUrl)
       .then((response) => setLayer(response.data.data.relationships.layers.data))
-     
       .catch((error) => console.log({ error }));
-    
+
     //console.log("params",params);
-
-  
-
-    
   }, [params]);
-
+  
+  const layersCount = layer?.length;
 
   return (
-    <>
-    
-      <Link to="/wms" state={{ from: location.state }}>
+    <div className="containers">
+      <Link to="/wms" /* state={{ from: location.state }} */>
         Go back
       </Link>
-      
+
       {wms && (
         <div className="users__card" key={wms.id}>
+          <p>
+            Server Name:
+            <span className="normal">{wms.attributes.title}</span>
+          </p>
           <p>
             Id:
             <span className="normal">{wms.id}</span>
@@ -77,10 +78,7 @@ const SingleWms = () => {
             Type:
             <span className="normal">{wms.type}</span>
           </p>
-          <p>
-            Server Name:
-            <span className="normal">{wms.attributes.title}</span>
-          </p>
+          
           <p>
             isAccessible:
             <span className="normal">{wms.attributes.isAccessible}</span>
@@ -133,21 +131,17 @@ const SingleWms = () => {
           </p>
 
           <p>
-            layers:
+            layers: ({layersCount})
             {layer &&
               layer.map((layer) => (
-               
                 <div className="users__card" key={layer.id}>
                   <span className="normal">{layer.id}</span>
                 </div>
               ))}
           </p>
-          
         </div>
       )}
-
-      
-    </>
+   </div>
   );
 };
 
