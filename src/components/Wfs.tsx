@@ -1,151 +1,156 @@
-import React, { useContext } from "react"
-import {Link} from "react-router-dom"
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import ReactPaginate from "react-paginate";
 import { ServiceContex } from "../Routes";
 
 export type WFSType = {
-	id: number
-	name: string
-	email: string
-	phone: string
-	website: string
-	type:string
-	attributes: Attributes
-	relationships: Relationships
-	
-}
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  website: string;
+  type: string;
+  attributes: Attributes;
+  relationships: Relationships;
+};
 export type Attributes = {
-	title: string,
+  title: string;
 
-    isAccessible: boolean,
-    stringRepresentation: string,
-    lastModifiedAt: null,
-    xmlBackupFile: string,
-    accessConstraints: string,
-    fees: string,
-    useLimitation: string,
-    licenseSourceNote: string,
-    //dateStamp:Date,
-    fileIdentifier: string,
-    abstract: string,
-    isActive: boolean,
-    version: string,
-            
-
-	
-}
+  isAccessible: boolean;
+  stringRepresentation: string;
+  lastModifiedAt: null;
+  xmlBackupFile: string;
+  accessConstraints: string;
+  fees: string;
+  useLimitation: string;
+  licenseSourceNote: string;
+  //dateStamp:Date,
+  fileIdentifier: string;
+  abstract: string;
+  isActive: boolean;
+  version: string;
+};
 export type Relationships = {
-	
-	featuretypes:{
-		meta:{
-			count:number,
-		},
-		data:[FeatureTypes],
-	},
-            
-
-	
-}
+  featuretypes: {
+    meta: {
+      count: number;
+    };
+    data: [FeatureTypes];
+  };
+};
 
 export type FeatureTypes = [
-	{
-	type:string,
-	id:string,
-	
-	}
-	
-]
+  {
+    type: string;
+    id: string;
+  }
+];
 
-
-type WfssType = Array<WFSType>
+type WfssType = Array<WFSType>;
 //type FeatureType = Array<FeatureTypes>
 
-
-
-
 const Wfss = () => {
-	const [wfss, setWfss] = React.useState<WfssType>([])
-	//const [features, setFeatures] = React.useState<FeatureType>([])
-	const [pagenumber, setPagenumber] = React.useState<number>(1)
-	const [totalpagenumber, setTotalPagenumber] = React.useState<number>(0)
+  const [wfss, setWfss] = React.useState<WfssType>([]);
+  //const [features, setFeatures] = React.useState<FeatureType>([])
+  const [pagenumber, setPagenumber] = React.useState<number>(1);
+  const [totalpagenumber, setTotalPagenumber] = React.useState<number>(0);
 
+  const context = useContext(ServiceContex);
 
-    const context = useContext(ServiceContex)
+  //console.log(context)
 
-	//console.log(context)
+  React.useEffect(() => {
+    axios
+      .get(
+        `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wfs/?page[number]=${pagenumber}`
+      )
+      .then((response) =>
+        setTotalPagenumber(Math.ceil(response.data.meta.pagination.count / 10))
+      )
+      .catch((error) => console.log({ error }));
+  }, [totalpagenumber]);
 
+  React.useEffect(() => {
+    axios
+      .get(
+        `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wfs/?page[number]=${pagenumber}`
+      )
+      .then((response) => setWfss(response.data.data))
+      .catch((error) => console.log({ error }));
+  }, [pagenumber]);
 
+  const handlePageClick = (data: any) => {
+    setPagenumber(data.selected + 1);
+  };
 
+  return (
+    <div className="containers">
+      <h1>WFSs List</h1>
 
-	React.useEffect(() => {
-		axios
-		.get(`https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wfs/?page[number]=${pagenumber}`)
-		.then(response => setTotalPagenumber(Math.ceil(response.data.meta.pagination.count/10)))
-		.catch(error => console.log({ error }));
-	  }, [totalpagenumber]);
+      <table className="table table-striped">
+        <thead>
+          <tr>
+            <th>wfsID</th>
+            <th>TITLE</th>
+            <th>ABSTRACT</th>
+            <th>LINK</th>
+            <th>MAP</th>
+          </tr>
+        </thead>
+        <tbody>
+          {wfss &&
+            wfss.map((wfs, i) => (
+              <tr key={i}>
+                <td>{wfs.id}</td>
+                <td>{wfs.attributes.title}</td>
+                <td>{wfs.attributes.abstract}</td>
+                <td>
+                
+                  <Link to={`/wfs/${wfs.id}`} state={{ from: pagenumber }}>
+                    <p>
+                      <span className="normal">
+                        {wfs.attributes.title}
+                        {"---"}
+                       
+                      </span>
 
+                      <button className="btn btn-info btn-sm">
+                        {wfs.relationships.featuretypes.meta.count}
+                      </button>
+                    </p>
+                  </Link>
+                </td>
+                <td>
+                  <Link to={`/map`} /* state={{from:pagenumber}}  */>
+                    <button className="btn btn-success">Map</button>
+                  </Link>
+                </td>
+              </tr>
+            ))}
+        </tbody>
+      </table>
+      <ReactPaginate
+        pageCount={totalpagenumber}
+        previousLabel={"previous"}
+        nextLabel={"next"}
+        breakLabel={"..."}
+        marginPagesDisplayed={3}
+        pageRangeDisplayed={3}
+        onPageChange={handlePageClick}
+        containerClassName={"pagination"}
+        pageClassName={"page-item"}
+        pageLinkClassName={"page-link"}
+        previousClassName={"page-item"}
+        previousLinkClassName={"page-link"}
+        nextClassName={"page-item"}
+        nextLinkClassName={"page-link"}
+        breakClassName={"page-item"}
+        breakLinkClassName={"page-link"}
+        activeClassName={"active"}
+      />
+    </div>
+  );
+};
 
-	React.useEffect(() => {
-		axios
-		  .get(`https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wfs/?page[number]=${pagenumber}`)
-		  .then(response => setWfss(response.data.data))
-		  .catch(error => console.log({ error }));
-	  }, [pagenumber]);
-
-	
-	  const handlePageClick =(data:any) =>{
-
-		setPagenumber(data.selected+1)
-	}
-
-	return (
-		<div className="users">
-			<h1>WFSs List</h1>
-			<ReactPaginate
-
-			pageCount={totalpagenumber}
-			previousLabel={'previous'}
-			nextLabel={'next'}
-			breakLabel={'...'}
-			marginPagesDisplayed={3}
-			pageRangeDisplayed={3}
-			onPageChange={handlePageClick}
-			containerClassName={'pagination'}
-			pageClassName={'page-item'}
-			pageLinkClassName={'page-link'}
-			previousClassName={'page-item'}
-			previousLinkClassName={'page-link'}
-			nextClassName={'page-item'}
-			nextLinkClassName={'page-link'}
-			breakClassName={'page-item'}
-			breakLinkClassName={'page-link'}
-			activeClassName={'active'}
-			
-			/>
-
-			{/* <button disabled={pagenumber===1 ? true : false} onClick={() => setPagenumber((prev) => prev-1)}>Back</button>
-			<>{` aktuel seite: ${pagenumber} `}</>
-			<button disabled={pagenumber===totalpagenumber ? true : false} onClick={() => setPagenumber((prev) => prev+1)}>Next Page</button>
-			 */}
-
-			<div className="users__list">
-				{wfss &&
-					wfss.map((wfs) => (
-						//single user card
-						<div className="users__card" key={wfs.id}>
-							<Link to={`/wfs/${wfs.id}`} state={{from:pagenumber}} >
-								<p>
-                                <span className="normal">{wfs.attributes.title}{"---("}{wfs.relationships.featuretypes.meta.count}{")"}</span>
-
-									{/* <span className="normal">{user.attributes.title}</span> */}
-								</p>
-							</Link>
-						</div>
-					))}
-			</div>
-		</div>
-	)
-}
-
-export default Wfss
+export default Wfss;

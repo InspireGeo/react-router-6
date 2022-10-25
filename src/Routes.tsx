@@ -26,6 +26,7 @@ import PublicRoutes from "./components/PublicRoutes"
 import PermissionDenied from "./components/PermissionDenied"
 
 import React, { createContext } from "react"
+import WmsEdit from "./components/WmsEdit"
 
 
 export const ServiceContex  = React.createContext<unknown>({} as unknown)
@@ -44,6 +45,7 @@ const MainRoutes = () => (
 				<Route path="wms"	element={<Wmss />}	/>
 				<Route path="wfs" element={<Wfss />}/>
 				<Route path="wms/:wmsId" element={<SingleWms/>} />
+				<Route path="wms/edit/:wmsId" element={<WmsEdit/>} />
 				<Route path="wfs/:wfsId" element={<SingleWfs />} />
 					{/* <Route path="tab2" element={<ProtectedRoutes roleRequired="USER" />}> */}
 					

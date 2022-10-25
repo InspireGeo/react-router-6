@@ -4,7 +4,6 @@ import axios from "axios";
 import ReactPaginate from "react-paginate";
 import { ServiceContex } from "../Routes";
 
-
 export type WmssType = {
   id: number;
   name: string;
@@ -114,7 +113,7 @@ const Wmss = () => {
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
- /*  let navigate = useNavigate(); 
+  /*  let navigate = useNavigate(); 
   const routeChange = () =>{ 
     let path = `/map`; 
     navigate(path);
@@ -151,7 +150,8 @@ const Wmss = () => {
             <th>TITLE</th>
             <th>ABSTRACT</th>
             <th>LINK</th>
-			<th>MAP</th>
+            <th>EDIT</th>
+            <th>MAP</th>
           </tr>
         </thead>
         <tbody>
@@ -164,17 +164,22 @@ const Wmss = () => {
                 <td>
                   <Link to={`/wms/${wms.id}`} /* state={{from:pagenumber}}  */>
                     {wms.attributes.title}
-                    <button className="btn btn-info btn-sm" >
+                    {"---"}
+                    <button className="btn btn-info btn-sm">
                       {wms.relationships.layers.meta.count}
                     </button>
                   </Link>
                 </td>
                 <td>
-                 
+                  <Link
+                    to={`/wms/edit/${wms.id}`} /* state={{from:pagenumber}}  */
+                  >
+                    <button className="btn btn-info btn-sm">Edit</button>
+                  </Link>
+                </td>
+                <td>
                   <Link to={`/map`} /* state={{from:pagenumber}}  */>
-                      <button className="btn btn-success" >
-                      Map
-                    </button>
+                    <button className="btn btn-success">Map</button>
                   </Link>
                 </td>
               </tr>
@@ -205,6 +210,3 @@ const Wmss = () => {
 };
 
 export default Wmss;
-
-
-

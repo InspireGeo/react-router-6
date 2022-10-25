@@ -1,67 +1,71 @@
-import React from "react"
-import {Link, useLocation, useNavigate} from "react-router-dom"
+import React, { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import mr_map from "../images/mr_map.png"; // Tell webpack this JS file uses this image
 
-import { navigationItems} from "../config/index";
+import { navigationItems } from "../config/index";
+import { Dispatch, SetStateAction } from "react";
 
 const Sidebar = () => {
-	const useAuth = () => {
-		const user = localStorage.getItem("user-info")
-		if (user) {
-			return true
-		} else {
-			return false
-		}
-	}
-	const user = useAuth()
-	const location = useLocation()
-	const navigation = useNavigate()
+  const useAuth = () => {
+    const user = localStorage.getItem("user-info");
+    if (user) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
-	const logout = () => {
-		localStorage.removeItem("user-info")
-		navigation("/login")
-	}
+  const user = useAuth();
+  const location = useLocation();
+  const navigation = useNavigate();
 
-	return (
-		<div className="sidebar">
-			<div className="sidebar__items">
-			<label id="name">Name</label>
-			<img src={mr_map} className="sidebar__items__Logo" />
-				{user && (
-					<>
-						{navigationItems.sidebar.map((item) => (
-							<Link
-								key={item.text}
-								to={item.to}
-								className={
-									location.pathname.includes(item.to) ? "sidebar_active" : ""
-								}>
-								{item.name}
-							</Link>
-						))}
-						{location.pathname !== "/login" && (
-							<button onClick={logout} className="btn btn-danger">logout</button>
-						)}
-					</>
-				)}
-				{!user && (
-					<Link
-						to="/login"
-						className={location.pathname === "/login" ? "sidebar_active" : ""}>
-						Login
-					</Link>
-				)}
-			</div>
-		</div>
-	)
-}
-
-export default Sidebar
+  const logout = () => {
+    localStorage.removeItem("user-info");
+    navigation("/login");
+  };
 
 
 
 
+  return (
+    <div className="sidebar">
+      <div className="sidebar__items">
+        <label id="name">{}</label>
+        <img src={mr_map} className="sidebar__items__Logo" />
+        {user && (
+          <>
+            {navigationItems.sidebar.map((item) => (
+              <Link
+                key={item.text}
+                to={item.to}
+                className={
+                  location.pathname.includes(item.to) ? "sidebar_active" : ""
+                }
+              >
+                {item.name}
+              </Link>
+            ))}
+            {location.pathname !== "/login" && (
+              <button onClick={logout} className="btn btn-danger">
+                logout
+              </button>
+            )}
+          </>
+        )}
+        {!user && (
+          <Link
+            to="/login"
+            className={location.pathname === "/login" ? "sidebar_active" : ""}
+          >
+            Login
+          </Link>
+        )}
+      </div>
+    </div>
+  );
+};
 
+export default Sidebar;
 
 /* import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -94,6 +98,3 @@ const Sidebar = () => {
 
 export default Sidebar;
  */
-
-
-
