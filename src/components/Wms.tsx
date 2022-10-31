@@ -58,8 +58,10 @@ const Wmss = () => {
   //const [layers, setLayers] = React.useState<Layer>([])
   const [pagenumber, setPagenumber] = React.useState<number>(1);
   const [totalpagenumber, setTotalPagenumber] = React.useState<number>(0);
+  const [wmsid, setWmsid] = React.useState<any>("");
 
   const context = useContext(ServiceContex);
+  const [wmsupdated, setWmsUpdated] = React.useState<number>(0);
 
   //console.log(context)
 
@@ -94,7 +96,7 @@ const Wmss = () => {
         setTotalPagenumber(Math.ceil(response.data.meta.pagination.count / 5))
       )
       .catch((error) => console.log({ error }));
-  }, []);
+  }, [totalpagenumber,wmss]);
 
   React.useEffect(() => {
     axios
@@ -103,7 +105,33 @@ const Wmss = () => {
       )
       .then((response) => setWmss(response.data.data))
       .catch((error) => console.log({ error }));
-  }, [pagenumber]);
+  }, [pagenumber,wmss]);
+
+ 
+  function deleteWms(wmsid: any) {
+    const r = window.confirm(`Do you really want to DELETE ${wmsid} ?`);
+    if (r == true) {
+      console.log("siliniyor")
+      var encodedData = window.btoa("mrmap:mrmap");
+
+      fetch(
+        `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wms/${wmsid}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: "Basic " + encodedData,
+          },
+        }
+      )
+        .then((response) => response.json())
+        
+      
+
+        window.alert(`WMS:  ${wmsid} is deleted`);
+    }
+   
+   
+  }
 
   const handlePageClick = (data: any) => {
     setPagenumber(data.selected + 1);
@@ -151,6 +179,7 @@ const Wmss = () => {
             <th>ABSTRACT</th>
             <th>LINK</th>
             <th>EDIT</th>
+            <th>DELETE</th>
             <th>MAP</th>
           </tr>
         </thead>
@@ -176,6 +205,14 @@ const Wmss = () => {
                   >
                     <button className="btn btn-info btn-sm">Edit</button>
                   </Link>
+                </td>
+                <td>
+                  <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => deleteWms(wms.id)}
+                  >
+                    Delete
+                  </button>
                 </td>
                 <td>
                   <Link to={`/map`} /* state={{from:pagenumber}}  */>

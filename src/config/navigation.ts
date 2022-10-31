@@ -37,6 +37,11 @@ export const navigationItems = {
       text:'map'
     },
     {
+      name: 'Tabs Demo ',
+      to: '/tabs', 
+      text:'tabsdemo'
+    },
+    {
       name: 'Footer',
       to: '/footer', 
       text:'footer'

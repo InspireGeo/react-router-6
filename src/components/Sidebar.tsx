@@ -3,7 +3,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import mr_map from "../images/mr_map.png"; // Tell webpack this JS file uses this image
 
 import { navigationItems } from "../config/index";
-import { Dispatch, SetStateAction } from "react";
+import Item from "antd/lib/list/Item";
+
 
 const Sidebar = () => {
   const useAuth = () => {
@@ -31,7 +32,10 @@ const Sidebar = () => {
     <div className="sidebar">
       <div className="sidebar__items">
         <label id="name">{}</label>
-        <img src={mr_map} className="sidebar__items__Logo" />
+     
+        <img src={mr_map} className="sidebar__items__Logo"  />
+     
+        
         {user && (
           <>
             {navigationItems.sidebar.map((item) => (

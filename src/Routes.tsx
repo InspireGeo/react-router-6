@@ -9,8 +9,6 @@ import Login from "./components/Login"
 
 import Example from "./components/Example"
 
-
-import Users, { WmssType } from "./components/Wms"
 import Wfss from "./components/Wfs"
 import SingleWfs from "./components/SingleWfs"
 
@@ -27,6 +25,13 @@ import PermissionDenied from "./components/PermissionDenied"
 
 import React, { createContext } from "react"
 import WmsEdit from "./components/WmsEdit"
+import WfsEdit from "./components/WfsEdit"
+
+import Tabs from  "./components/Tabs"
+import Tab1 from "./components/Tab1"
+import Tab2 from  "./components/Tab2"
+import Tab3 from "./components/Tab3"
+
 
 
 export const ServiceContex  = React.createContext<unknown>({} as unknown)
@@ -46,8 +51,17 @@ const MainRoutes = () => (
 				<Route path="wfs" element={<Wfss />}/>
 				<Route path="wms/:wmsId" element={<SingleWms/>} />
 				<Route path="wms/edit/:wmsId" element={<WmsEdit/>} />
+				<Route path="wfs/edit/:wfsId" element={<WfsEdit/>} />
 				<Route path="wfs/:wfsId" element={<SingleWfs />} />
-					{/* <Route path="tab2" element={<ProtectedRoutes roleRequired="USER" />}> */}
+				<Route path="tabs" element={<Tabs props={{userName: "mrmap"}} />}>
+					<Route path="/tabs" element={<Navigate replace to="tab1" />} />
+					<Route path="tab1" element={<Tab1 />} />
+					<Route path="tab2" element={<ProtectedRoutes roleRequired="mrmap" />}>
+						<Route path="/tabs/tab2" element={<Tab2 />} />
+					</Route>
+					<Route path="tab3" element={<Tab3 />} />
+				</Route>
+				
 					
 			</Route>
 		</Route>

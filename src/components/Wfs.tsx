@@ -69,7 +69,7 @@ const Wfss = () => {
         setTotalPagenumber(Math.ceil(response.data.meta.pagination.count / 10))
       )
       .catch((error) => console.log({ error }));
-  }, [totalpagenumber]);
+  }, [totalpagenumber,wfss]);
 
   React.useEffect(() => {
     axios
@@ -78,7 +78,30 @@ const Wfss = () => {
       )
       .then((response) => setWfss(response.data.data))
       .catch((error) => console.log({ error }));
-  }, [pagenumber]);
+  }, [pagenumber,wfss]);
+
+  function deleteWfs(wfsid: any) {
+    const r = window.confirm(`Do you really want to DELETE ${wfsid} ?`);
+    if (r == true) {
+      console.log("siliniyor")
+      var encodedData = window.btoa("mrmap:mrmap");
+
+      fetch(
+        `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wfs/${wfsid}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: "Basic " + encodedData,
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then(setWfss);
+        window.alert(`WMS:  ${wfsid} is deleted`);
+    }
+   
+   
+  }
 
   const handlePageClick = (data: any) => {
     setPagenumber(data.selected + 1);
@@ -95,6 +118,8 @@ const Wfss = () => {
             <th>TITLE</th>
             <th>ABSTRACT</th>
             <th>LINK</th>
+            <th>EDIT</th>
+            <th>DELETE</th>
             <th>MAP</th>
           </tr>
         </thead>
@@ -120,6 +145,21 @@ const Wfss = () => {
                       </button>
                     </p>
                   </Link>
+                </td>
+                <td>
+                  <Link
+                    to={`/wfs/edit/${wfs.id}`} /* state={{from:pagenumber}}  */
+                  >
+                    <button className="btn btn-info btn-sm">Edit</button>
+                  </Link>
+                </td>
+                <td>
+                  <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => deleteWfs(wfs.id)}
+                  >
+                    Delete
+                  </button>
                 </td>
                 <td>
                   <Link to={`/map`} /* state={{from:pagenumber}}  */>

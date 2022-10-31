@@ -1,7 +1,7 @@
 import React from "react";
 
 type Props = {
-  roleRequired: "ADMIN" | "USER";
+  roleRequired: "mrmap" | "USER";
   message?: string;
   children?: React.ReactNode;
 };
