@@ -33,8 +33,8 @@ const Sidebar = () => {
       <div className="sidebar__items">
         <label id="name">{}</label>
      
-        <img src={mr_map} className="sidebar__items__Logo"  />
-     
+         <img src={mr_map} className="sidebar__items__Logo"  />
+      
         
         {user && (
           <>

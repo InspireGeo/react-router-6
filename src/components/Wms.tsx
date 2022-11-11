@@ -62,7 +62,7 @@ const Wmss = () => {
 
   const context = useContext(ServiceContex);
   const [wmsupdated, setWmsUpdated] = React.useState<number>(0);
-
+  const [count, setCount] = React.useState(0);
   //console.log(context)
 
   React.useEffect(() => {
@@ -96,7 +96,7 @@ const Wmss = () => {
         setTotalPagenumber(Math.ceil(response.data.meta.pagination.count / 5))
       )
       .catch((error) => console.log({ error }));
-  }, [totalpagenumber,wmss]);
+  }, [totalpagenumber,count]);
 
   React.useEffect(() => {
     axios
@@ -105,13 +105,17 @@ const Wmss = () => {
       )
       .then((response) => setWmss(response.data.data))
       .catch((error) => console.log({ error }));
-  }, [pagenumber,wmss]);
+  }, [pagenumber,count]);
+
+
 
  
   function deleteWms(wmsid: any) {
+
+   
     const r = window.confirm(`Do you really want to DELETE ${wmsid} ?`);
     if (r == true) {
-      console.log("siliniyor")
+   
       var encodedData = window.btoa("mrmap:mrmap");
 
       fetch(
@@ -124,12 +128,19 @@ const Wmss = () => {
         }
       )
         .then((response) => response.json())
+        .then(() => {
+          setWmsUpdated(wmsupdated+1)
+        });
+
+       
         
       
 
         window.alert(`WMS:  ${wmsid} is deleted`);
+     
     }
-   
+    setCount(count+1)
+
    
   }
 
@@ -177,7 +188,7 @@ const Wmss = () => {
             <th>wmsID</th>
             <th>TITLE</th>
             <th>ABSTRACT</th>
-            <th>LINK</th>
+            <th>LAYERS</th>
             <th>EDIT</th>
             <th>DELETE</th>
             <th>MAP</th>

@@ -57,33 +57,37 @@ const Wfss = () => {
   const [totalpagenumber, setTotalPagenumber] = React.useState<number>(0);
 
   const context = useContext(ServiceContex);
-
+  const [wfsupdated, setWfsUpdated] = React.useState<number>(0);
+  const [count, setCount] = React.useState(0);
   //console.log(context)
 
   React.useEffect(() => {
     axios
       .get(
-        `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wfs/?page[number]=${pagenumber}`
+        `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wfs/?page[size]=5&page[number]=${pagenumber}`
       )
       .then((response) =>
-        setTotalPagenumber(Math.ceil(response.data.meta.pagination.count / 10))
+        setTotalPagenumber(Math.ceil(response.data.meta.pagination.count / 5))
       )
       .catch((error) => console.log({ error }));
-  }, [totalpagenumber,wfss]);
+  }, [totalpagenumber,count]);
 
   React.useEffect(() => {
-    axios
+    axios 
       .get(
-        `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wfs/?page[number]=${pagenumber}`
+        `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wfs/?page[size]=5&page[number]=${pagenumber}`
       )
       .then((response) => setWfss(response.data.data))
       .catch((error) => console.log({ error }));
-  }, [pagenumber,wfss]);
+  }, [pagenumber,count]);
+
+
 
   function deleteWfs(wfsid: any) {
     const r = window.confirm(`Do you really want to DELETE ${wfsid} ?`);
     if (r == true) {
-      console.log("siliniyor")
+
+
       var encodedData = window.btoa("mrmap:mrmap");
 
       fetch(
@@ -96,9 +100,15 @@ const Wfss = () => {
         }
       )
         .then((response) => response.json())
-        .then(setWfss);
-        window.alert(`WMS:  ${wfsid} is deleted`);
+       
+ 
+   
+      
+        window.alert(`WFS:  ${wfsid} is deleted`);
+        //refreshPage();
     }
+   
+    setCount(count+1)
    
    
   }
@@ -117,7 +127,7 @@ const Wfss = () => {
             <th>wfsID</th>
             <th>TITLE</th>
             <th>ABSTRACT</th>
-            <th>LINK</th>
+            <th>LAYERS</th>
             <th>EDIT</th>
             <th>DELETE</th>
             <th>MAP</th>

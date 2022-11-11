@@ -56,10 +56,11 @@ const MainRoutes = () => (
 				<Route path="tabs" element={<Tabs props={{userName: "mrmap"}} />}>
 					<Route path="/tabs" element={<Navigate replace to="tab1" />} />
 					<Route path="tab1" element={<Tab1 />} />
+					<Route path="tab3" element={<Tab3 />} />
 					<Route path="tab2" element={<ProtectedRoutes roleRequired="mrmap" />}>
 						<Route path="/tabs/tab2" element={<Tab2 />} />
 					</Route>
-					<Route path="tab3" element={<Tab3 />} />
+					
 				</Route>
 				
 					

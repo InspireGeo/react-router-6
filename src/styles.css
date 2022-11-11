@@ -54,7 +54,7 @@ body{
     display: flex;
 }
 .sidebar{
-    width:10%;
+    width:4%;
     background-color: #365262;
     color: #EBF8FE;
     padding-top:20px;
@@ -67,19 +67,33 @@ body{
   
     
 }
+
+.sidebar:hover {
+    width:10%;
+    overflow:visible;
+    }
+
 .sidebar__items{
     display: flex;
     flex-direction: column;
     margin-top:20px;
 
+
 }
+.sidebar__items:hover {
+    display: flex;
+    flex-direction: column;
+    margin-top:20px;
+    color: #feebee;
+    }
+
 .sidebar__items__Logo{
     text-decoration: none;
     margin-bottom:100px;
     margin-left:10px;
     margin-right:10px;
     padding-top: 10px;
-    display: flex;
+
   
 
 }
@@ -91,6 +105,13 @@ body{
 .sidebar__items a{
     color: #EBF8FE;
     font-size:20px;
+    margin-bottom:40px;
+    text-decoration: none;
+}
+.sidebar__items a:hover{
+    color: #053b53;
+    background-color: rgb(159, 217, 243);;
+    font-size:30px;
     margin-bottom:40px;
     text-decoration: none;
 }
@@ -112,6 +133,7 @@ body{
 .inner-content{
     padding-top:70px;
     padding-left:40px;
+    padding-right:40px;
 }
 
 h1{
@@ -127,6 +149,7 @@ h2{
 .login{
     padding-top:70px;
     padding-left:40px;
+    padding-right:40px;
 }
 .login button{
     margin-top:40px;

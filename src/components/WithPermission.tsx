@@ -15,7 +15,7 @@ const useRole = () => {
     user = JSON.parse(_user);
   }
   if (user) {
-    return user.role;
+    return "mrmap";
   } else {
     return "USER";
   }

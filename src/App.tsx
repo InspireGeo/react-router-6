@@ -5,6 +5,7 @@ import Sidebar from "./components/Sidebar";
 import { Drawer, Button, Card, Collapse } from "antd";
 
 import "./styles.css";
+
 import {
   SimpleButton,
   MapComponent,
