@@ -32,10 +32,22 @@ export const navigationItems = {
       text:'wfs'
     },
     {
+      name: 'Organizations ',
+      to: '/organisation', 
+      text:'organisation'
+    },
+   /*  {
       name: 'Map ',
       to: '/map', 
       text:'map'
+    }, */
+    {
+      name: 'Map ',
+      to: '/reactmap', 
+      text:'reactmap'
     },
+   
+   
     {
       name: 'Tabs Demo ',
       to: '/tabs', 

@@ -4,7 +4,7 @@ import mr_map from "../images/mr_map.png"; // Tell webpack this JS file uses thi
 
 import { navigationItems } from "../config/index";
 import Item from "antd/lib/list/Item";
-
+import { color } from "openlayers";
 
 const Sidebar = () => {
   const useAuth = () => {
@@ -24,18 +24,23 @@ const Sidebar = () => {
     localStorage.removeItem("user-info");
     navigation("/login");
   };
+  
 
-
+if(useAuth()){
+  var user2 = JSON.parse(localStorage.getItem("user-info") || "{}");
+  var name=user2.data.attributes.username;
+}else{var name:any = "";}
 
 
   return (
     <div className="sidebar">
       <div className="sidebar__items">
         <label id="name">{}</label>
-     
-         <img src={mr_map} className="sidebar__items__Logo"  />
-      
+
         
+        <> {name}</>
+        <img src={mr_map} className="sidebar__items__Logo" />
+
         {user && (
           <>
             {navigationItems.sidebar.map((item) => (

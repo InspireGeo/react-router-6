@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import Map from "./Map";
-import { Layers, TileLayer, VectorLayer } from "./Layers";
+import Map from "./MapComponent/Map";
+import { Layers, TileLayer, VectorLayer } from "./MapComponent/Layers";
 import { Style, Icon } from "ol/style";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
-import { osm, vector, geo4 } from "./Source";
+import { osm, vector, geo4 } from "./MapComponent/Source";
 import { fromLonLat, get } from "ol/proj";
 import GeoJSON from "ol/format/GeoJSON";
-import { Controls, FullScreenControl } from "./Controls";
-import FeatureStyles from "./Features/Styles";
+import { Controls, FullScreenControl } from "./MapComponent/Controls";
+import FeatureStyles from "./MapComponent/Features/Styles";
 
 import mapConfig from "./config.json";
-import "./App.css";
+
+
+
 
 const geojsonObject = mapConfig.geojsonObject;
 const geojsonObject2 = mapConfig.geojsonObject2;
@@ -52,6 +54,7 @@ const Mapp = (props) => {
   ]); */
   const [features, setFeatures] = useState(addMarkers(markersLonLat));
 
+ 
   return (
     <div className="square border border-primary">
       <Map center={fromLonLat(center)} zoom={zoom}>

@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import axios from "axios";
 import { useParams, Link, useLocation } from "react-router-dom";
 
-import { FeatureTypes, WFSType } from "./Wfs";
+import { FeatureTypes, WFSType,includedKeywords } from "./Wfs";
 
 const WfsEdit = () => {
   const params = useParams();
@@ -15,14 +15,22 @@ const WfsEdit = () => {
 
   const user = localStorage.getItem("user-info");
 
+
+  const [keyword, setKeyword] = React.useState<includedKeywords>();
+  const [keywords, setKeywords] = React.useState([]);
+
+
+
+
  
   React.useEffect(() => {
-    const singleWmsApiUrl = `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wfs/${params.wfsId}`;
+    const singleWmsApiUrl = `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wfs/${params.wfsId}/?include=keywords`;
     axios
       .get(singleWmsApiUrl)
       .then((response) => {
         setWfs(response.data.data);
         setTitle(response.data.data.attributes.title);
+        setKeyword(response.data.included);
      
       })
 
@@ -157,7 +165,16 @@ const WfsEdit = () => {
               <span className="normal">{wfs.attributes.version}</span>
             </p>
 
-            <p></p>
+            <p>
+            keywords: 
+            {keyword &&
+              keyword.map((keywo) => (
+                
+                  <button className="btn btn-info"  >{keywo.attributes.keyword} </button>
+               
+               
+              ))}
+          </p>
           </div>
         )}
       </>

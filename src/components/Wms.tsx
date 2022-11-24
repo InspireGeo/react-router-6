@@ -1,8 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import ReactPaginate from "react-paginate";
 import { ServiceContex } from "../Routes";
+import Accordion from "react-bootstrap/Accordion";
+import { KeywordSyntaxKind } from "typescript";
+
 
 export type WmssType = {
   id: number;
@@ -14,6 +17,8 @@ export type WmssType = {
   attributes: Attributes;
   relationships: Relationships;
 };
+
+
 export type Attributes = {
   title: string;
 
@@ -31,6 +36,8 @@ export type Attributes = {
   isActive: boolean;
   version: string;
 };
+
+
 export type Relationships = {
   layers: {
     meta: {
@@ -38,7 +45,16 @@ export type Relationships = {
     };
     data: [Layers];
   };
+
+  keywords: {
+    meta: {
+      count: number;
+    };
+    data: [Keywords];
+  };
 };
+
+
 
 export type Layers = [
   {
@@ -46,6 +62,66 @@ export type Layers = [
     id: string;
   }
 ];
+
+export type includedLayers = [
+  {
+    type: string;
+    id: string;
+    attributes: includedLayersAttributes;
+  }
+];
+
+export type includedLayersAttributes = {
+  title: string,
+  name:string,
+};
+
+
+
+
+
+
+export type Keywords = [
+  {
+    type: string;
+    id: string;
+  }
+];
+
+export type includedKeywords = [
+  {
+    type: string;
+    id: string;
+    attributes: includedKeywordsAttributes;
+  }
+];
+
+export type includedKeywords2 = [
+  {
+    type: string;
+    id: string;
+   
+  }
+];
+
+export type includedKeywordsAttributes = {
+  stringRepresentation: string,
+  keyword: string,
+};
+
+
+export type OrganizationType = {
+  id: number;
+  type: string;
+  attributes: OrgaAttributes;
+  
+};
+
+
+export type OrgaAttributes = {
+  stringRepresentation: string,
+  name: string,
+};
 
 type WmsType = Array<WmssType>;
 //type Layer = Array<Layers>
@@ -55,6 +131,7 @@ const Wmss = () => {
   const params = useParams();
 
   const [wmss, setWmss] = React.useState<WmsType>([]);
+  
   //const [layers, setLayers] = React.useState<Layer>([])
   const [pagenumber, setPagenumber] = React.useState<number>(1);
   const [totalpagenumber, setTotalPagenumber] = React.useState<number>(0);
@@ -64,6 +141,16 @@ const Wmss = () => {
   const [wmsupdated, setWmsUpdated] = React.useState<number>(0);
   const [count, setCount] = React.useState(0);
   //console.log(context)
+  
+  const [wmsCapabilities, setwmsCapabilities] = useState("");
+
+
+  type OrgaType = Array<OrganizationType>;
+  const [organizations, setOrganizations] = React.useState<OrgaType>([]);
+  const [orgaId, setOrgaId] = useState("1");
+
+
+
 
   React.useEffect(() => {
     //console.log("location from new page", location.state)
@@ -75,17 +162,6 @@ const Wmss = () => {
     //console.log(location.state)
   }, [location.state]);
 
-  /* 	 
-     if(location.state!=null){
-		const pagenumber2=location.state
-		console.log(pagenumber2)
-	 } */
-  /*  React.useEffect(() => {
-		axios
-		.get(`https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wms/?page[number]=${pagenumber}`)
-		.then(response => setLayers(response.data.data.layers.data))
-		  .catch(error => console.log({ error }));
-	  }, [wmsNumber]); */
 
   React.useEffect(() => {
     axios
@@ -96,7 +172,7 @@ const Wmss = () => {
         setTotalPagenumber(Math.ceil(response.data.meta.pagination.count / 5))
       )
       .catch((error) => console.log({ error }));
-  }, [totalpagenumber,count]);
+  }, [totalpagenumber, count, pagenumber]);
 
   React.useEffect(() => {
     axios
@@ -105,17 +181,11 @@ const Wmss = () => {
       )
       .then((response) => setWmss(response.data.data))
       .catch((error) => console.log({ error }));
-  }, [pagenumber,count]);
+  }, [pagenumber, count]);
 
-
-
- 
   function deleteWms(wmsid: any) {
-
-   
     const r = window.confirm(`Do you really want to DELETE ${wmsid} ?`);
     if (r == true) {
-   
       var encodedData = window.btoa("mrmap:mrmap");
 
       fetch(
@@ -129,19 +199,12 @@ const Wmss = () => {
       )
         .then((response) => response.json())
         .then(() => {
-          setWmsUpdated(wmsupdated+1)
+          setWmsUpdated(wmsupdated + 1);
         });
 
-       
-        
-      
-
-        window.alert(`WMS:  ${wmsid} is deleted`);
-     
+      window.alert(`WMS:  ${wmsid} is deleted`);
     }
-    setCount(count+1)
-
-   
+    setCount(count + 1);
   }
 
   const handlePageClick = (data: any) => {
@@ -152,36 +215,65 @@ const Wmss = () => {
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
-  /*  let navigate = useNavigate(); 
-  const routeChange = () =>{ 
-    let path = `/map`; 
-    navigate(path);
+  async function insertWms() {
+    var encodedData = window.btoa("mrmap:mrmap");
+
+    if (wmsCapabilities.length == 0) {
+      alert("WMS Capabilities field is required and cannot be empty");
+      return false;
+    }
+    let result = await fetch(
+      "https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wms/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/vnd.api+json",
+          Authorization: "Basic " + encodedData,
+        },
+
+        mode: "cors",
+        body: JSON.stringify({
+          data: {
+            attributes: {
+              getCapabilitiesUrl: wmsCapabilities,
+              collectMetadataRecords: true,
+            },
+            relationships: {
+              owner: { data: { type: "Organization", id: orgaId} },
+            },
+            type: "WebMapService",
+          },
+        }),
+      }
+    
+    );
+  
+    if (result.status === 202) {
+      alert("WMS ist registriert");
+    } else {
+      alert("invalid WMS Capabilities address");
+    }
   }
-   */
+
+ 
+  React.useEffect(() => {
+    axios
+      .get(
+        `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/accounts/organizations/`
+      )
+      .then((response) => setOrganizations(response.data.data))
+      .catch((error) => console.log({ error }));
+  }, []);
+
+
+
+ 
+
 
   return (
     <div className="containers">
       <h1>WMSs List</h1>
 
-      {/* <button disabled={pagenumber===1 ? true : false} onClick={() => setPagenumber((prev) => prev-1)}>Back</button>
-			<>{` aktuel seite: ${pagenumber} `}</>
-			<button disabled={pagenumber===totalpagenumber ? true : false} onClick={() => setPagenumber((prev) => prev+1)}>Next Page</button>
-			 */}
-
-      {/* <div className="users__list">
-        {wmss &&
-					wmss.map((wms) => (
-						//single user card
-						<div className="users__card" key={wms.id}>
-							<Link to={`/wms/${wms.id}` }  >
-								<p>
-								
-									<span className="normal">{wms.attributes.title}{"---("}{wms.relationships.layers.meta.count}{")"} </span>
-								</p>
-							</Link>
-						</div>
-					))} 
-      </div>*/}
       <table className="table table-striped">
         <thead>
           <tr>
@@ -226,7 +318,7 @@ const Wmss = () => {
                   </button>
                 </td>
                 <td>
-                  <Link to={`/map`} /* state={{from:pagenumber}}  */>
+                  <Link to={`/reactmap`} /* state={{from:pagenumber}}  */>
                     <button className="btn btn-success">Map</button>
                   </Link>
                 </td>
@@ -253,6 +345,37 @@ const Wmss = () => {
         breakLinkClassName={"page-link"}
         activeClassName={"active"}
       />
+
+      <br />
+      <Accordion>
+        <Accordion.Item eventKey="1">
+          <Accordion.Header>WMS Registry</Accordion.Header>
+          <Accordion.Body>
+            <div>
+              {" "}
+              <input
+                type="text"
+                placeholder="wmsCapabilities"
+                size={80}
+                onChange={(e) => setwmsCapabilities(e.target.value)}
+                className="form-control"
+              ></input>
+             
+              <select   className="form-select"  onChange={(e) => setOrgaId(e.target.value)}>
+                {organizations.map((organization,i) => (
+                  <option key={i} value={organization.id}>
+                    {organization.attributes.name}
+                  </option>
+                ))}
+              
+              </select>
+              <button className="btn btn-success" onClick={insertWms}>
+                Add Wms
+              </button>
+            </div>
+          </Accordion.Body>
+        </Accordion.Item>
+      </Accordion>
     </div>
   );
 };

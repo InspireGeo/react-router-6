@@ -1,8 +1,10 @@
-import React, { useContext } from "react";
+import React, { useContext,useState } from "react";
 import axios from "axios";
 import { useParams, Link, useLocation } from "react-router-dom";
 
-import { WmssType } from "./Wms";
+import { includedKeywords, includedKeywords2,WmssType } from "./Wms";
+import { Keywords } from "./Wms";
+
 
 const WmsEdit = () => {
   const params = useParams();
@@ -15,27 +17,36 @@ const WmsEdit = () => {
 
   const user = localStorage.getItem("user-info");
 
+  type includedKeywordsType = Array<includedKeywords2>;
+
+  const [keyword, setKeyword] = React.useState<includedKeywordsType>([]);
+
+  const [keywords, setKeywords] = React.useState<includedKeywords>();
+
+
   React.useEffect(() => {
-    const singleWmsApiUrl = `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wms/${params.wmsId}`;
+    const singleWmsApiUrl = `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wms/${params.wmsId}/?include=keywords`;
     axios
       .get(singleWmsApiUrl)
       .then((response) => {
         setWms(response.data.data);
         setTitle(response.data.data.attributes.title);
-       
+ 
+        setKeywords(response.data.included);
+     
       })
 
       .catch((error) => console.log({ error }));
   }, [params,wmsupdated]);
 
- 
+
 
   function updateWms() {
-    
+   
     var encodedData = window.btoa("mrmap:mrmap");
     //console.log(title);
     fetch(
-      `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wms/${params.wmsId}`,
+      `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wms/${params.wmsId}/?include=keywords`,
       {
         method: "PATCH",
         body: JSON.stringify({
@@ -45,6 +56,13 @@ const WmsEdit = () => {
             attributes: {
               title: title,
             },
+            /* relationships: {
+              keywords: {data:[{type: "Keyword",id:"789"},{type: "Keyword",id:"790"}]},
+            },  */
+              /* relationships: {
+              keywords: {data:{...keyword}},
+            },   */
+            
           },
         }),
         headers: {
@@ -155,6 +173,17 @@ const WmsEdit = () => {
           <p>
             version:
             <span className="normal">{wms.attributes.version}</span>
+          </p>
+         
+          <p>
+            keywords: 
+            {keywords &&
+              keywords.map((keywo) => (
+                
+                  <button className="btn btn-info"  >{keywo.attributes.keyword} </button>
+               
+               
+              ))}
           </p>
         </div>
       )}

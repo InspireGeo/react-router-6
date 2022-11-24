@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import axios from "axios";
 import { useParams, Link, useLocation } from "react-router-dom";
 
-import { WmssType } from "./Wms";
+import { includedLayers, WmssType } from "./Wms";
 import { Layers } from "./Wms";
 //import { ServiceContex } from "../Routes";
 
@@ -13,7 +13,7 @@ const SingleWms = () => {
 
   const [wms, setWms] = React.useState<WmssType>();
 
-  const [layer, setLayer] = React.useState<Layers>();
+  const [layer, setLayer] = React.useState<includedLayers>();
 
   //const location = useLocation();
 
@@ -37,23 +37,21 @@ const SingleWms = () => {
   }, [location.state]);
  */
   React.useEffect(() => {
-    const singleWmsApiUrl = `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wms/${params.wmsId}`;
+    const singleWmsApiUrl = `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wms/${params.wmsId}?include=layers&fields[Layer]=title`;
+    
     axios
       .get(singleWmsApiUrl)
-      .then((response) => setWms(response.data.data))
+      .then((response) => {
+        setWms(response.data.data);
+        setLayer(response.data.included);
+       
+      })
+      
+      
       .catch((error) => console.log({ error }));
     //console.log("params",params);
   }, [params]);
 
-  React.useEffect(() => {
-    const singleWmsApiUrl = `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wms/${params.wmsId}`;
-    axios
-      .get(singleWmsApiUrl)
-      .then((response) => setLayer(response.data.data.relationships.layers.data))
-      .catch((error) => console.log({ error }));
-
-    //console.log("params",params);
-  }, [params]);
   
   const layersCount = layer?.length;
 
@@ -135,7 +133,7 @@ const SingleWms = () => {
             {layer &&
               layer.map((layer) => (
                 <div className="users__card" key={layer.id}>
-                  <span className="normal">{layer.id}</span>
+                  <span className="normal"> <input className="form-check-input" type="checkbox" value= {layer.attributes.name} id="flexCheckDefault"/> {layer.attributes.title} </span> 
                 </div>
               ))}
           </p>

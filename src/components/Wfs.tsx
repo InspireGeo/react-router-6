@@ -1,9 +1,9 @@
-import React, { useContext } from "react";
+import React, { useContext,useEffect, useState  } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import ReactPaginate from "react-paginate";
 import { ServiceContex } from "../Routes";
-
+import Accordion from "react-bootstrap/Accordion";
 export type WFSType = {
   id: number;
   name: string;
@@ -14,6 +14,7 @@ export type WFSType = {
   attributes: Attributes;
   relationships: Relationships;
 };
+
 export type Attributes = {
   title: string;
 
@@ -38,6 +39,33 @@ export type Relationships = {
     };
     data: [FeatureTypes];
   };
+  keywords: {
+    meta: {
+      count: number;
+    };
+    data: [Keywords];
+  };
+};
+
+
+export type Keywords = [
+  {
+    type: string;
+    id: string;
+  }
+];
+
+export type includedKeywords = [
+  {
+    type: string;
+    id: string;
+    attributes: includedKeywordsAttributes;
+  }
+];
+
+export type includedKeywordsAttributes = {
+  stringRepresentation: string,
+  keyword: string,
 };
 
 export type FeatureTypes = [
@@ -46,6 +74,36 @@ export type FeatureTypes = [
     id: string;
   }
 ];
+
+
+
+
+export type includedFeatureTypes = [
+  {
+    type: string;
+    id: string;
+    attributes: includedFeatureTypesAttributes;
+  }
+];
+
+export type includedFeatureTypesAttributes = {
+  title: string,
+  
+};
+
+
+export type OrganizationType = {
+  id: number;
+  type: string;
+  attributes: OrgaAttributes;
+  
+};
+
+
+export type OrgaAttributes = {
+  stringRepresentation: string,
+  name: string,
+};
 
 type WfssType = Array<WFSType>;
 //type FeatureType = Array<FeatureTypes>
@@ -60,6 +118,11 @@ const Wfss = () => {
   const [wfsupdated, setWfsUpdated] = React.useState<number>(0);
   const [count, setCount] = React.useState(0);
   //console.log(context)
+  const [wfsCapabilities, setwfsCapabilities] = useState("");
+
+  type OrgaType = Array<OrganizationType>;
+  const [organizations, setOrganizations] = React.useState<OrgaType>([]);
+  const [orgaId, setOrgaId] = useState("");
 
   React.useEffect(() => {
     axios
@@ -70,7 +133,7 @@ const Wfss = () => {
         setTotalPagenumber(Math.ceil(response.data.meta.pagination.count / 5))
       )
       .catch((error) => console.log({ error }));
-  }, [totalpagenumber,count]);
+  }, [totalpagenumber,count,pagenumber]);
 
   React.useEffect(() => {
     axios 
@@ -117,6 +180,58 @@ const Wfss = () => {
     setPagenumber(data.selected + 1);
   };
 
+  async function insertWfs() {
+    var encodedData = window.btoa("mrmap:mrmap");
+
+    if (wfsCapabilities.length == 0) {
+      alert("WFS Capabilities field is required and cannot be empty");
+      return false;
+    }
+    let result = await fetch(
+      "https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wfs/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/vnd.api+json",
+          Authorization: "Basic " + encodedData,
+        },
+
+        mode: "cors",
+        body: JSON.stringify({
+          data: {
+            attributes: {
+              getCapabilitiesUrl: wfsCapabilities,
+              collectMetadataRecords: true,
+            },
+            relationships: {
+              owner: { data: { type: "Organization", id: "1" } },
+            },
+            type: "WebFeatureService",
+          },
+        }),
+      }
+    );
+
+    if (result.status === 202) {
+      alert("WFS ist registriert")
+    } else {
+      alert("invalid WFS Capabilities address");
+    }
+  }
+
+
+
+  React.useEffect(() => {
+    axios
+      .get(
+        `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/accounts/organizations/`
+      )
+      .then((response) => setOrganizations(response.data.data))
+      .catch((error) => console.log({ error }));
+  }, []);
+
+
+
   return (
     <div className="containers">
       <h1>WFSs List</h1>
@@ -127,7 +242,7 @@ const Wfss = () => {
             <th>wfsID</th>
             <th>TITLE</th>
             <th>ABSTRACT</th>
-            <th>LAYERS</th>
+            <th>FEATURES</th>
             <th>EDIT</th>
             <th>DELETE</th>
             <th>MAP</th>
@@ -172,7 +287,7 @@ const Wfss = () => {
                   </button>
                 </td>
                 <td>
-                  <Link to={`/map`} /* state={{from:pagenumber}}  */>
+                  <Link to={`/reactmap`} /* state={{from:pagenumber}}  */>
                     <button className="btn btn-success">Map</button>
                   </Link>
                 </td>
@@ -199,6 +314,37 @@ const Wfss = () => {
         breakLinkClassName={"page-link"}
         activeClassName={"active"}
       />
+
+<br />
+      <Accordion>
+        <Accordion.Item eventKey="1">
+          <Accordion.Header>WFS Registry</Accordion.Header>
+          <Accordion.Body>
+            <div>
+              {" "}
+              <input
+                type="text"
+                placeholder="wfsCapabilities"
+                size={80}
+                onChange={(e) => setwfsCapabilities(e.target.value)}
+                className="form-control"
+              ></input>
+              
+              <select  className="form-select" onChange={(e) => setOrgaId(e.target.value)} >
+                {organizations.map((organization,i) => (
+                  <option key={i} value={organization.attributes.name}>
+                    {organization.attributes.name}
+                  </option>
+                ))}
+              
+              </select>
+              <button className="btn btn-success" onClick={insertWfs}>
+                Add Wfs
+              </button>
+            </div>
+          </Accordion.Body>
+        </Accordion.Item>
+      </Accordion>
     </div>
   );
 };

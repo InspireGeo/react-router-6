@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Alert, Button, Form, Input, notification, Row } from "antd";
+
+import Button from 'react-bootstrap/Button';
+
 
 function Login() {
   const [loggedin, setLoggedIn] = useState(true);
@@ -69,9 +71,8 @@ function Login() {
           className="form-control"
         ></input>
         <br />
-        <button onClick={login} className="btn btn-primary">
-          Login
-        </button>
+        <Button variant="primary" onClick={login}>Login</Button>
+      
       </div>
     </div>
   );

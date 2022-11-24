@@ -31,6 +31,8 @@ import Tabs from  "./components/Tabs"
 import Tab1 from "./components/Tab1"
 import Tab2 from  "./components/Tab2"
 import Tab3 from "./components/Tab3"
+import Organisation from "./components/Organisations"
+import MapTerrestris from "./reactGeo/MapTerrestris"
 
 
 
@@ -46,9 +48,11 @@ const MainRoutes = () => (
 			<Route path="/" element={<Navigate replace to="dashboard" />} />
 				<Route path="dashboard" element={<Dashboard />} />
 				<Route path="map" element={<Mapp/>} />
+				<Route path="reactmap" element={<MapTerrestris/>} />
 				<Route path="footer" element={<Footer/>} />
 				<Route path="wms"	element={<Wmss />}	/>
 				<Route path="wfs" element={<Wfss />}/>
+				<Route path="organisation" element={<Organisation />}/>
 				<Route path="wms/:wmsId" element={<SingleWms/>} />
 				<Route path="wms/edit/:wmsId" element={<WmsEdit/>} />
 				<Route path="wfs/edit/:wfsId" element={<WfsEdit/>} />
