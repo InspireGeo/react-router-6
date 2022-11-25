@@ -73,7 +73,7 @@ export type includedLayers = [
 
 export type includedLayersAttributes = {
   title: string,
-  name:string,
+  identifier:string,
 };
 
 

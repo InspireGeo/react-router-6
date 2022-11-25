@@ -37,7 +37,7 @@ const SingleWms = () => {
   }, [location.state]);
  */
   React.useEffect(() => {
-    const singleWmsApiUrl = `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wms/${params.wmsId}?include=layers&fields[Layer]=title`;
+    const singleWmsApiUrl = `https://mrmap.geospatial-interoperability-solutions.eu/api/v1/registry/wms/${params.wmsId}?include=layers&fields[Layer]=title,identifier`;
     
     axios
       .get(singleWmsApiUrl)
@@ -133,7 +133,7 @@ const SingleWms = () => {
             {layer &&
               layer.map((layer) => (
                 <div className="users__card" key={layer.id}>
-                  <span className="normal"> <input className="form-check-input" type="checkbox" value= {layer.attributes.name} id="flexCheckDefault"/> {layer.attributes.title} </span> 
+                  <span className="normal"> <input className="form-check-input" type="checkbox" value= {layer.attributes.identifier} id="flexCheckDefault"/> {layer.attributes.title}-({layer.attributes.identifier}) </span> 
                 </div>
               ))}
           </p>

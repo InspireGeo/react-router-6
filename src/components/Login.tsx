@@ -49,7 +49,8 @@ function Login() {
 		localStorage.setItem("user-info", JSON.stringify(result));
 
 		navigate("/dashboard");
-	}else{ localStorage.removeItem("user-info"); navigate("/denied");}
+	}else{localStorage.removeItem("user-info"); navigate("/denied"); 
+  /* localStorage.setItem("user-info", JSON.stringify({username: "mrmap",password:"mrmap"})); */}
     
   }
   return (

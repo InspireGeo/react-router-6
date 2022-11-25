@@ -8,7 +8,7 @@ import OlSourceTileWMS from "ol/source/TileWMS";
 import OlLayerGroup from "ol/layer/Group";
 import TileWMS from "ol/source/TileWMS";
 import { transform } from "ol/proj.js";
-import { Drawer, Button, Card, Collapse} from "antd";
+import { Drawer, Button, Card, Collapse } from "antd";
 
 import {
   SimpleButton,
@@ -18,12 +18,11 @@ import {
   LayerTree,
   MapContext,
   DrawButton,
- DigitizeButton,
+  DigitizeButton,
   CoordinateInfo,
   useMap,
   SelectFeaturesButton,
 } from "@terrestris/react-geo";
-
 
 import "ol/ol.css";
 import "antd/dist/antd.css";
@@ -35,7 +34,6 @@ import { defaults as defaultControls } from "ol/control";
 import { ToggleGroup } from "@terrestris/react-geo";
 
 const Panel = Collapse.Panel;
-
 
 const layerGroup = new OlLayerGroup({
   name: "Layergroup",
@@ -56,8 +54,7 @@ const layerGroup = new OlLayerGroup({
     //   })
     // }),
 
-    
- /*    new OlLayerTile({
+    /*    new OlLayerTile({
       name: "rp_dtk50",
       minResolution: 0,
       maxResolution: 2000,
@@ -96,8 +93,7 @@ const layerGroup = new OlLayerGroup({
       }),
     }),
 
-
-   /*  new OlLayerTile({
+    /*  new OlLayerTile({
       name: "WMS RP DTK100",
       minResolution: 0,
       maxResolution: 2000,
@@ -137,9 +133,6 @@ const mousePositionControl = new MousePosition({
   target: document.getElementById("mouse-position"),
 });
 
-
-
-
 const olMap = new OlMap({
   view: new OlView({
     center: transform(
@@ -149,12 +142,10 @@ const olMap = new OlMap({
     ),
     zoom: 8,
   }),
-  
+
   layers: [layerGroup],
   controls: defaultControls(),
 });
-
-
 
 function Map() {
   const map = useMap();
@@ -270,7 +261,7 @@ function DrawButtonWithMap() {
       </DigitizeButton>
     </ToggleGroup>
   );
-} 
+}
 
 // function MeasureCoor() {
 //   const map = useMap();
@@ -297,16 +288,20 @@ function MapTerrestris() {
     setVisible(!visible);
   };
 
- 
-
-
   return (
-    <div className="map" >
-      
-      <MapContext.Provider value={olMap} >
+    <div className="map">
+      <MapContext.Provider value={olMap}>
         <Map />
-        
-        <Button  className="btn btn-success" onClick={toggleDrawer}  style={{ position: "fixed", top: "30px", right: "30px" }} > | | | </Button>
+
+        <Button
+          className="btn btn-success"
+          onClick={toggleDrawer}
+          style={{ position: "fixed", top: "30px", right: "30px" }}
+        >
+          {" "}
+          | | |{" "}
+        </Button>
+
         {/* <SimpleButton
           style={{ position: "fixed", top: "30px", right: "30px" }}
           onClick={toggleDrawer}
@@ -338,7 +333,7 @@ function MapTerrestris() {
                 <p>
                   <DrawButtonWithMap />
                 </p>
-              </Panel> 
+              </Panel>
 
               <Panel header="Extra" key="4">
                 <p>
