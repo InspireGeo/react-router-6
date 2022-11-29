@@ -16,7 +16,7 @@ import Error from "./components/Error"
 import SingleWms from "./components/SingleWms"
 import Footer from "./components/Footer"
 import Wmss from "./components/Wms"
-import Mapp from "./Mapps"
+import Mapp from "./MapComponent/Mapps"
 
 
 import ProtectedRoutes from "./components/ProtectedRoutes"
@@ -48,7 +48,7 @@ const MainRoutes = () => (
 			<Route path="/" element={<Navigate replace to="dashboard" />} />
 				<Route path="dashboard" element={<Dashboard />} />
 				<Route path="map" element={<Mapp/>} />
-				<Route path="reactmap" element={<MapTerrestris/>} />
+				<Route path="reactmap" element={<MapTerrestris />} />
 				<Route path="footer" element={<Footer/>} />
 				<Route path="wms"	element={<Wmss />}	/>
 				<Route path="wfs" element={<Wfss />}/>
