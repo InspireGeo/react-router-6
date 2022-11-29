@@ -56,7 +56,7 @@ body{
 .sidebar{
     width:10%;
     background-color: #365262;
-    color: #EBF8FE;
+    color: hsl(199, 87%, 15%);
     padding-top:20px;
     padding-left:20px;
     height:100vh;
@@ -107,14 +107,14 @@ body{
   } */
 
 .sidebar__items a{
-    color: #EBF8FE;
+    color: hsl(198, 47%, 87%);
     font-size:20px;
     margin-bottom:40px;
     text-decoration: none;
 }
 .sidebar__items a:hover{
     color: #053b53;
-    background-color: #e5f0f5;
+    background-color: hsl(199, 81%, 70%);
     font-size:30px;
 
     padding-right:20px;
@@ -262,6 +262,9 @@ td, th {
     padding: 0;
     height: 95%;
     width: 82vw;}
+
+  
+
 
 /* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
 /* stylelint-disable no-duplicate-selectors */

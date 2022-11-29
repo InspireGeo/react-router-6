@@ -35,10 +35,10 @@ if(useAuth()){
   return (
     <div className="sidebar">
       <div className="sidebar__items">
-        <label id="name">{}</label>
+        <label id="name">{name}</label>
 
         
-        <> {name}</>
+        
         <img src={mr_map} className="sidebar__items__Logo" />
 
         {user && (

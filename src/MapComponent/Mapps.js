@@ -1,16 +1,16 @@
 import React, { useState } from "react";
-import Map from "./MapComponent/Map";
-import { Layers, TileLayer, VectorLayer } from "./MapComponent/Layers";
+import Map from "./Map";
+import { Layers, TileLayer, VectorLayer } from "./Layers";
 import { Style, Icon } from "ol/style";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
-import { osm, vector, geo4 } from "./MapComponent/Source";
+import { osm, vector, geo4 } from "./Source";
 import { fromLonLat, get } from "ol/proj";
 import GeoJSON from "ol/format/GeoJSON";
-import { Controls, FullScreenControl } from "./MapComponent/Controls";
-import FeatureStyles from "./MapComponent/Features/Styles";
+import { Controls, FullScreenControl } from "./Controls";
+import FeatureStyles from "./Features/Styles";
 
-import mapConfig from "./config.json";
+import mapConfig from "../config.json";
 
 
 

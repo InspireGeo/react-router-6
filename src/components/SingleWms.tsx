@@ -5,6 +5,7 @@ import { useParams, Link, useLocation } from "react-router-dom";
 import { includedLayers, WmssType } from "./Wms";
 import { Layers } from "./Wms";
 //import { ServiceContex } from "../Routes";
+import MapTerrestris from "../reactGeo/MapTerrestris"
 
 
 const SingleWms = () => {
@@ -14,7 +15,7 @@ const SingleWms = () => {
   const [wms, setWms] = React.useState<WmssType>();
 
   const [layer, setLayer] = React.useState<includedLayers>();
-
+  const [checkedLayer, setcheckedLayer] = React.useState<includedLayers>();
   //const location = useLocation();
 
   //const [pagenumber, setPagenumber] = React.useState(location.state)
@@ -55,8 +56,23 @@ const SingleWms = () => {
   
   const layersCount = layer?.length;
 
+  const [checked, setChecked] = React.useState<string[]>([]);
+
+  const handleCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
+    var updatedList =[...checked];
+   
+    if (event.target.checked) {
+      updatedList = [...checked, event.target.value];
+    } else {
+      updatedList.splice(checked.indexOf(event.target.value), 1);
+    }
+    setChecked(updatedList);
+  };
+ 
+
   return (
     <div className="containers">
+
       <Link to="/wms" /* state={{ from: location.state }} */>
         Go back
       </Link>
@@ -127,14 +143,18 @@ const SingleWms = () => {
             version:
             <span className="normal">{wms.attributes.version}</span>
           </p>
-
+        
+  
           <p>
-            layers: ({layersCount})
+            layers: ({layersCount})  <Link to={`/reactmap`}  state={{layerName:checked}}  >
+                    <button className="btn btn-success">Map</button>
+                  </Link>
             {layer &&
               layer.map((layer) => (
                 <div className="users__card" key={layer.id}>
-                  <span className="normal"> <input className="form-check-input" type="checkbox" value= {layer.attributes.identifier} id="flexCheckDefault"/> {layer.attributes.title}-({layer.attributes.identifier}) </span> 
-                </div>
+                  <span className="normal"> <input className="form-check-input" type="checkbox" value= {layer.attributes.identifier} id="flexCheckDefault"   onChange={handleCheck}/> {layer.attributes.title}-({layer.attributes.identifier}) </span> 
+                  
+                 </div>
               ))}
           </p>
         </div>

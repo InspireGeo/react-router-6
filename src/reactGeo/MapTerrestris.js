@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import OlMap from "ol/Map";
 import OlView from "ol/View";
 import OlLayerTile from "ol/layer/Tile";
@@ -54,18 +54,7 @@ const layerGroup = new OlLayerGroup({
     //   })
     // }),
 
-    /*    new OlLayerTile({
-      name: "rp_dtk50",
-      minResolution: 0,
-      maxResolution: 2000,
-      source: new TileWMS({
-        url: "http://geo4.service24.rlp.de/wms/dtk50.fcgi?REQUEST=GetCapabilities&VERSION=1.3.0&SERVICE=WMS",
-        params: {
-          LAYERS: "rp_dtk50",
-          VERSION: "1.3.0",
-        },
-      }),
-    }), */
+
 
     new OlLayerTile({
       name: "rp_dop",
@@ -92,6 +81,19 @@ const layerGroup = new OlLayerGroup({
         },
       }),
     }),
+
+    new OlLayerTile({
+      name: "Offenlagen gem. §4 (a) BauGB",
+      minResolution: 0,
+      maxResolution: 2000,
+      source: new TileWMS({
+        url: "https://www.geoportal.rlp.de/mapserver/cgi-bin/mapserv?map=/data/umn/extern/offenlagen/offenlagen_public.map&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS",
+        params: {
+          LAYERS: "offenlagen_rlp_public",
+          VERSION: "1.1.1",
+        },
+      }),
+    }), 
 
     /*  new OlLayerTile({
       name: "WMS RP DTK100",
@@ -278,9 +280,25 @@ function LayerTreeWithMap(props) {
   return <LayerTree map={map} {...props} />;
 }
 
-function MapTerrestris() {
+function MapTerrestris(checked) {
   // const [layers, setLayers] = useState();
   // const [feature, setFeature] = useState();
+
+
+const location =useLocation()
+
+const [locationState, setLocationState]=React.useState({layerName:''})
+
+React.useEffect(() =>{
+  console.log("layers: ",location)
+  if(location.state){
+  setLocationState(location.state)}
+
+},[])
+
+console.log("layers: ",locationState)
+
+
 
   const [visible, setVisible] = useState(true);
 
@@ -308,7 +326,7 @@ function MapTerrestris() {
           iconName="bars"
         /> */}
         <Drawer
-          title="react-geo-application"
+          title="Map Module"
           placement="right"
           onClose={toggleDrawer}
           visible={visible}

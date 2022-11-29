@@ -54,7 +54,7 @@ export const navigationItems = {
       text:'tabsdemo'
     },
     {
-      name: 'Footer',
+      name: 'Extra',
       to: '/footer', 
       text:'footer'
     }
