@@ -47,7 +47,11 @@ export const navigationItems = {
       text:'reactmap'
     },
    
-   
+    {
+      name: 'WMC ',
+      to: '/wmc', 
+      text:'wmc'
+    },
     {
       name: 'Tabs Demo ',
       to: '/tabs', 

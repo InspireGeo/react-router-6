@@ -11,11 +11,14 @@ import Example from "./components/Example"
 
 import Wfss from "./components/Wfs"
 import SingleWfs from "./components/SingleWfs"
+import SingleWmc from "./components/SingleWmc"
+
 
 import Error from "./components/Error"
 import SingleWms from "./components/SingleWms"
 import Footer from "./components/Footer"
 import Wmss from "./components/Wms"
+import Wmcs from "./components/Wmc"
 import Mapp from "./MapComponent/Mapps"
 
 
@@ -52,8 +55,10 @@ const MainRoutes = () => (
 				<Route path="footer" element={<Footer/>} />
 				<Route path="wms"	element={<Wmss />}	/>
 				<Route path="wfs" element={<Wfss />}/>
+				<Route path="wmc" element={<Wmcs />}/>
 				<Route path="organisation" element={<Organisation />}/>
 				<Route path="wms/:wmsId" element={<SingleWms/>} />
+				<Route path="wmc/:wmcId" element={<SingleWmc/>} />
 				<Route path="wms/edit/:wmsId" element={<WmsEdit/>} />
 				<Route path="wfs/edit/:wfsId" element={<WfsEdit/>} />
 				<Route path="wfs/:wfsId" element={<SingleWfs />} />

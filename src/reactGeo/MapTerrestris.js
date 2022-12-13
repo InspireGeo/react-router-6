@@ -33,6 +33,8 @@ import { defaults as defaultControls } from "ol/control";
 // import { Collapse } from "antd";
 import { ToggleGroup } from "@terrestris/react-geo";
 
+
+
 const Panel = Collapse.Panel;
 
 const layerGroup = new OlLayerGroup({
@@ -54,14 +56,12 @@ const layerGroup = new OlLayerGroup({
     //   })
     // }),
 
-
-
     new OlLayerTile({
       name: "rp_dop",
       minResolution: 0,
       maxResolution: 2000,
       source: new TileWMS({
-        url: "https://geo4.service24.rlp.de/wms/dop_basis.fcgi?REQUEST=GetCapabilities&VERSION=1.3.0&SERVICE=WMS",
+        url: "https://geo4.service24.rlp.de/wms/dop_basis.fcgi",
         params: {
           LAYERS: "rp_dop",
           VERSION: "1.3.0",
@@ -74,9 +74,22 @@ const layerGroup = new OlLayerGroup({
       maxResolution: 2000,
       source: new TileWMS({
         //url: 'https://inspire.naturschutz.rlp.de/cgi-bin/wfs/sd_d1_wms?service=wms&version=1.3.0&request=getCapabilities&',
-        url: "https://berichte5.naturschutz.rlp.de/kartendienste_naturschutz/mod_ogc/wms_getmap.php?mapfile=naturschutzgebiet&service=WMS&version=1.1.1&Request=GetCapabilities",
+        url: "https://berichte5.naturschutz.rlp.de/kartendienste_naturschutz/mod_ogc/wms_getmap.php?mapfile=naturschutzgebiet",
         params: {
           LAYERS: "naturschutzgebiet",
+          VERSION: "1.1.1",
+        },
+      }),
+    }),
+
+    new OlLayerTile({
+      name: "Gemeinden",
+      minResolution: 0,
+      maxResolution: 2000,
+      source: new TileWMS({
+        url: "http://geo5.service24.rlp.de/wms/verwaltungsgrenzen_rp.fcgi",
+        params: {
+          LAYERS: "Gemeinden",
           VERSION: "1.1.1",
         },
       }),
@@ -87,13 +100,13 @@ const layerGroup = new OlLayerGroup({
       minResolution: 0,
       maxResolution: 2000,
       source: new TileWMS({
-        url: "https://www.geoportal.rlp.de/mapserver/cgi-bin/mapserv?map=/data/umn/extern/offenlagen/offenlagen_public.map&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS",
+        url: "https://www.geoportal.rlp.de/mapserver/cgi-bin/mapserv?map=/data/umn/extern/offenlagen/offenlagen_public.map",
         params: {
-          LAYERS: "offenlagen_rlp_public",
-          VERSION: "1.1.1",
+          LAYERS: "offenlagen_pers",
+          VERSION: "1.3.0",
         },
       }),
-    }), 
+    }),
 
     /*  new OlLayerTile({
       name: "WMS RP DTK100",
@@ -141,6 +154,7 @@ const olMap = new OlMap({
       [7.586143638830786, 50.35594786885198],
       "EPSG:4326",
       "EPSG:3857"
+     
     ),
     zoom: 8,
   }),
@@ -284,21 +298,18 @@ function MapTerrestris(checked) {
   // const [layers, setLayers] = useState();
   // const [feature, setFeature] = useState();
 
+  const location = useLocation();
 
-const location =useLocation()
+  const [locationState, setLocationState] = React.useState({  });
 
-const [locationState, setLocationState]=React.useState({layerName:''})
+  React.useEffect(() => {
+    //console.log("layers: ", location);
+    if (location.state) {
+      setLocationState(location.state);
+    }
+  }, []);
 
-React.useEffect(() =>{
-  console.log("layers: ",location)
-  if(location.state){
-  setLocationState(location.state)}
-
-},[])
-
-console.log("layers: ",locationState)
-
-
+  console.log("layers: ", locationState);
 
   const [visible, setVisible] = useState(true);
 
@@ -355,9 +366,7 @@ console.log("layers: ",locationState)
 
               <Panel header="Extra" key="4">
                 <p>
-                  {/* <SelectFeaturesButton layers={layers} onFeatureSelect={e => setFeature(e.selected[0])}>
-          Select feature
-        </SelectFeaturesButton> */}
+                  
                 </p>
               </Panel>
             </Collapse>
